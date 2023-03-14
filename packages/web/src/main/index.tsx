@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { availableLanguages, LocalizationProvider } from '@spotify-clone/shared/i18n';
 import { changeLanguage } from 'i18next';
 
+import { AuthButton } from '../auth';
 import { getLocale } from '../i18n/utils';
 
 const Button: React.FC<{ children: string }> = ({ children }) => {
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         {availableLanguages.map(lang => (
           <Button key={lang}>{lang}</Button>
         ))}
+        <AuthButton />
       </header>
     </div>
   );

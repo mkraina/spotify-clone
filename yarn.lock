@@ -2659,6 +2659,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-simple-oauth2-login@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@types/react-simple-oauth2-login/-/react-simple-oauth2-login-0.5.0.tgz#dfb8fb1b9caf6aa67475b9acb6633d63421bf1c6"
+  integrity sha512-5w96dvgxmIwZi83D7BdXvrcJ63DVvEEapn5sns5zqTFz+e9kZLo3YNvhkeMCMdOo266g8bQd0jhoH31T2Tb0Zg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-test-renderer@^18.0.0":
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-18.0.0.tgz#7b7f69ca98821ea5501b21ba24ea7b6139da2243"
@@ -10687,6 +10694,11 @@ react-shallow-renderer@^16.15.0:
   dependencies:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
+
+react-simple-oauth2-login@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/react-simple-oauth2-login/-/react-simple-oauth2-login-0.5.4.tgz#5d9b254fbc83484bd994f463c1f9e3643f0c639b"
+  integrity sha512-BkVpgGVFGpZEDK6lr1ao+hJXuPvK56aSA0t8jKST0Q+Aya504bSLXNk9A0eU8XaF2GeQqW9n/M0aWNkezvS4Pg==
 
 react-test-renderer@18.1.0:
   version "18.1.0"
