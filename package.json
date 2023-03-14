@@ -1,0 +1,45 @@
+{
+  "private": true,
+  "name": "spotify-clone",
+  "version": "1.0.0",
+  "repository": "https://github.com/mkraina/spotify-clone.git",
+  "author": "Martin Kraina <kraina.martin@gmail.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": []
+  },
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache",
+    "tscheck": "tsc --noEmit",
+    "verify": "yarn run lint --quiet && yarn tscheck && yarn test",
+    "test": "jest --passWithNoTests",
+    "prepare": "husky install",
+    "postinstall": "cd packages/mobile && npx pod-install"
+  },
+  "devDependencies": {
+    "@prettier/plugin-xml": "^2.2.0",
+    "@shopify/eslint-plugin": "^42.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-perf": "^3.3.1",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-typescript-enum": "^2.1.0",
+    "eslint-plugin-typescript-sort-keys": "^2.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
+  }
+}
