@@ -17,7 +17,7 @@
     "tscheck": "tsc --noEmit",
     "verify": "yarn run lint --quiet && yarn tscheck && yarn test",
     "test": "jest --passWithNoTests",
-    "prepare": "husky install",
+    "prepare": "husky install && ./scripts/prepareSecrets.sh",
     "postinstall": "cd packages/mobile && npx pod-install"
   },
   "devDependencies": {

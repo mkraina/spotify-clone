@@ -14,6 +14,7 @@ import {
   LocalizationProvider,
 } from '@spotify-clone/shared/i18n';
 
+import { auth } from '../auth';
 import { getLocale } from '../i18n';
 
 const styles = StyleSheet.create({
@@ -37,6 +38,7 @@ const App = React.memo(() => {
         {availableLanguages.map(lang => (
           <Button key={lang}>{lang}</Button>
         ))}
+        <RNButton onPress={auth} title="authorize" />
       </View>
     </>
   );
