@@ -2,8 +2,8 @@ import './styles.css';
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiProvider, useUserProfile } from '@spotify-clone/shared/api';
-import { LocalizationProvider } from '@spotify-clone/shared/i18n';
+import { withSharedProvider } from '@spotify-clone/shared';
+import { useUserProfile } from '@spotify-clone/shared/api';
 
 import { AuthButton } from '../auth';
 import { getLocale } from '../i18n/utils';
@@ -31,14 +31,4 @@ const App: React.FC = () => {
   );
 };
 
-const Main: React.FC = () => {
-  return (
-    <ApiProvider>
-      <LocalizationProvider detect={getLocale}>
-        <App />
-      </LocalizationProvider>
-    </ApiProvider>
-  );
-};
-
-export default Main;
+export default withSharedProvider(App, { getLocale });

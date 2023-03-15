@@ -11,8 +11,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import { ApiProvider, useAccessToken, useUserProfile, useUserTop } from '@spotify-clone/shared/api';
-import { LocalizationProvider } from '@spotify-clone/shared/i18n';
+import { withSharedProvider } from '@spotify-clone/shared';
+import { useAccessToken, useUserProfile, useUserTop } from '@spotify-clone/shared/api';
 import { TopItemsTimeRange, Track } from 'spotify-types';
 
 import { auth } from '../auth';
@@ -102,10 +102,4 @@ const App = React.memo(() => {
   );
 });
 
-export default () => (
-  <ApiProvider>
-    <LocalizationProvider detect={getLocale}>
-      <App />
-    </LocalizationProvider>
-  </ApiProvider>
-);
+export default withSharedProvider(App, { getLocale });
