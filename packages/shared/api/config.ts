@@ -1,3 +1,7 @@
+export const SPOTIFY_AUTH_CALLBACK_WEB = __DEV__ ? 'http://localhost:3000/oauth' : ''; //TODO:
+export const SPOTIFY_AUTH_CALLBACK_MOBILE = 'com.mkraina.spotifyclone.auth:/oauth';
+export const SPOTIFY_AUTHORIZATION_URL = 'https://accounts.spotify.com/authorize';
+export const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 export const SPOTIFY_AUTH_SCOPES = [
   'ugc-image-upload',
   'user-read-playback-state',

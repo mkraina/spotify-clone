@@ -1,15 +1,20 @@
 import { useCallback } from 'react';
 import OAuth2Login from 'react-simple-oauth2-login';
-import { SPOTIFY_AUTH_SCOPES, useAccessToken } from '@spotify-clone/shared/api';
+import {
+  SPOTIFY_AUTH_CALLBACK_WEB,
+  SPOTIFY_AUTH_SCOPES,
+  SPOTIFY_AUTHORIZATION_URL,
+  useAccessToken,
+} from '@spotify-clone/shared/api';
 import { SPOTIFY_CLIENT_ID } from '@spotify-clone/shared/secrets';
 
 export const AuthButton: React.FC = () => {
   const [, setAccessToken] = useAccessToken();
   return (
     <OAuth2Login
-      authorizationUrl="https://accounts.spotify.com/authorize"
+      authorizationUrl={SPOTIFY_AUTHORIZATION_URL}
       clientId={SPOTIFY_CLIENT_ID}
-      redirectUri="http://localhost:3000/oauth"
+      redirectUri={SPOTIFY_AUTH_CALLBACK_WEB}
       responseType="token"
       scope={SPOTIFY_AUTH_SCOPES.join(' ')}
       onFailure={console.warn}
