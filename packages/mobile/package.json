@@ -14,7 +14,8 @@
     "react-i18next": "^12.2.0",
     "react-native": "0.70.6",
     "react-native-app-auth": "^6.4.3",
-    "react-native-localize": "^2.2.6"
+    "react-native-localize": "^2.2.6",
+    "spotify-types": "^1.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

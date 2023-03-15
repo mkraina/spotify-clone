@@ -18,7 +18,8 @@
     "verify": "yarn run lint --quiet && yarn tscheck && yarn test",
     "test": "jest --passWithNoTests",
     "prepare": "husky install && ./scripts/prepareSecrets.sh",
-    "postinstall": "cd packages/mobile && npx pod-install"
+    "postinstall": "cd packages/mobile && npx pod-install",
+    "clean": "rm -rf node_modules packages/*/node_modules && yarn"
   },
   "devDependencies": {
     "@prettier/plugin-xml": "^2.2.0",

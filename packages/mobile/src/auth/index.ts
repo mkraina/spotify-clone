@@ -1,5 +1,5 @@
 import { AuthConfiguration, authorize } from 'react-native-app-auth';
-import { SPOTIFY_AUTH_SCOPES } from '@spotify-clone/shared/auth';
+import { SPOTIFY_AUTH_SCOPES } from '@spotify-clone/shared/api';
 import { SPOTIDY_CLIENT_SECRET, SPOTIFY_CLIENT_ID } from '@spotify-clone/shared/secrets';
 
 const config: AuthConfiguration = {
@@ -15,8 +15,8 @@ const config: AuthConfiguration = {
 
 export const auth = async () => {
   try {
-    const result = await authorize(config);
-    console.warn(JSON.stringify(result, null, 2));
+    const { accessToken } = await authorize(config);
+    return accessToken;
   } catch (e) {
     console.warn(e);
   }
