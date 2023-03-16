@@ -5,6 +5,7 @@ module.exports = {
   plugins: [
     'react',
     'react-perf',
+    'react-hooks',
     '@typescript-eslint',
     '@shopify',
     'import',
@@ -97,6 +98,10 @@ module.exports = {
         reservedFirst: true,
       },
     ],
+    // Hooks
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+
     // Promises
     'require-await': 'error',
     'no-void': ['error', { allowAsStatement: true }],

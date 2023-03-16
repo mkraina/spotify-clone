@@ -6,13 +6,13 @@ const variables = [
     types: nonFunctionTypes,
     format: ['camelCase'], //, 'UPPER_CASE'],
   },
-  /*{
+  {
     //UPPER_CASE on exported variables
     selector: 'variable',
     types: nonFunctionTypes,
-    format: ['UPPER_CASE'],
+    format: ['UPPER_CASE', 'camelCase'],
     modifiers: ['global', 'exported'],
-  },*/
+  },
   {
     //no format on descrutured variables
     selector: 'variable',
