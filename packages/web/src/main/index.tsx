@@ -1,33 +1,44 @@
-import './styles.css';
-
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { withSharedProvider } from '@spotify-clone/shared';
-import { useUserProfile } from '@spotify-clone/shared/api';
 
-import { AuthButton } from '../auth';
 import { getLocale } from '../i18n/utils';
+import { paths, routes } from '../navigation';
 
-const User = () => {
-  const user = useUserProfile();
-  const imgUri = user.data?.images[0].url;
-  return (
-    <>
-      <img src={imgUri} />
-      {user.data?.display_name}
-    </>
-  );
-};
+import AccountPage from './containers/AccountPage';
+import ArtistPage from './containers/ArtistPage';
+import HomePage from './containers/HomePage';
+import SearchPage from './containers/SearchPage';
+import TrackPage from './containers/TrackPage';
+
 const App: React.FC = () => {
-  const { t } = useTranslation();
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>{t('welcomeMessage')}</p>
-        <AuthButton />
-        <User />
-      </header>
-    </div>
+    <BrowserRouter>
+      <div>
+        <nav>
+          <ul>
+            {Object.entries(routes).map(([key, value]) => {
+              return (
+                <li key={key}>
+                  <Link to={typeof value === 'string' ? value : value({ id: `${key}-id` })}>
+                    {key}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <Routes>
+          <Route Component={HomePage} index />
+          <Route Component={AccountPage} path={paths.account} />
+          <Route Component={ArtistPage} path={paths.artist} />
+          <Route Component={SearchPage} path={paths.search} />
+          <Route Component={TrackPage} path={paths.track} />
+          <Route Component={null} path="oauth" />
+          <Route element={<Navigate replace to={routes.home} />} path="*" />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 };
 

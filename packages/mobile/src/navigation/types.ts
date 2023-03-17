@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import { ScreenParamList } from '@spotify-clone/shared/navigation';
+import { ScreenName, ScreenParamList } from '@spotify-clone/shared/navigation';
 
-type ParamList<T extends keyof ScreenParamList> = Pick<ScreenParamList, T>;
+type ParamList<T extends ScreenName> = Pick<ScreenParamList, T>;
 
 export type RootStackParamList = ParamList<'account' | 'artist' | 'home' | 'search' | 'track'>;
 

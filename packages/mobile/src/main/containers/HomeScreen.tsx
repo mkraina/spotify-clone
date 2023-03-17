@@ -99,7 +99,7 @@ export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
         )}
         title={accessToken ? 'log out' : 'authorize'}
       />
-      <Button onPress={useCallback(() => navigate('search'), [navigate])} title="search" />
+      <Button onPress={useCallback(() => navigate('search', {}), [navigate])} title="search" />
       <User />
       <View style={styles.listsContainer}>
         <TopTracksList range="long_term" />
