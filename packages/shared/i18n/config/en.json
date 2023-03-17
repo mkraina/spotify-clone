@@ -8,5 +8,15 @@
   "homePageTitleMorning": "Good morning",
   "homePageTitleEvening": "Good evening",
   "collectionPageTitle": "Your library",
-  "searchPageTitle": "Search"
+  "searchPageTitle": "Search",
+  "searchFilterArtists": "Artists",
+  "searchFilterAll": "All",
+  "searchFilterTracks": "Songs",
+  "searchFilterAlbums": "Albums",
+  "searchFilterPodcastsAndShows": "Podcasts & Shows",
+  "episodesTitle": "Episodes",
+  "albumsTitle": "Albums",
+  "artistsTitle": "Artists",
+  "showsTitle": "Podcasts",
+  "tracksTitle": "Songs"
 }

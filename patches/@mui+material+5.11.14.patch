@@ -1,0 +1,15 @@
+diff --git a/node_modules/@mui/material/useMediaQuery/useMediaQuery.d.ts b/node_modules/@mui/material/useMediaQuery/useMediaQuery.d.ts
+index 609144f..1dd2cb4 100644
+--- a/node_modules/@mui/material/useMediaQuery/useMediaQuery.d.ts
++++ b/node_modules/@mui/material/useMediaQuery/useMediaQuery.d.ts
+@@ -1,3 +1,4 @@
++import { Theme } from '../styles/createTheme';
+ /**
+  * @deprecated Not used internally. Use `MediaQueryListEvent` from lib.dom.d.ts instead.
+  */
+@@ -43,4 +44,4 @@ export interface UseMediaQueryOptions {
+         matches: boolean;
+     };
+ }
+-export default function useMediaQuery<Theme = unknown>(queryInput: string | ((theme: Theme) => string), options?: UseMediaQueryOptions): boolean;
++export default function useMediaQuery(queryInput: string | ((theme: Theme) => string), options?: UseMediaQueryOptions): boolean;

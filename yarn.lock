@@ -2990,6 +2990,15 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/react@^16.7.20":
+  version "16.14.37"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.37.tgz#46bab00eee7829e7551ec8d7d1b12afd5de84a87"
+  integrity sha512-Jy/9txct4JC2nQsJNACeFczzIQ2Bh7s1PZpbYMs9jbj/jREWxEH0qGFYYZb7dq7H1sU0AAzHAPevtxBHGk6N6Q==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
 "@types/redux-persist@^4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@types/redux-persist/-/redux-persist-4.3.1.tgz#aa4c876859e0bea5155e5f7980e5b8c4699dc2e6"
@@ -11319,6 +11328,11 @@ react-shallow-renderer@^16.15.0:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
 
+react-slide-fade-in@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-slide-fade-in/-/react-slide-fade-in-1.0.9.tgz#399abeec7553f89fc09374538944a07cf3168e9d"
+  integrity sha512-nc5kk+jA3iYKE0IhTb0KViapmv1WdOiWow/Y7xMCqUQQZFWMHSEBfmYGjaqQhQeejW/O9XabcTEVr2Z7uPyFgA==
+
 react-test-renderer@18.1.0:
   version "18.1.0"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-18.1.0.tgz#35b75754834cf9ab517b6813db94aee0a6b545c3"
@@ -11337,6 +11351,13 @@ react-transition-group@^4.4.5:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-use-hover@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-use-hover/-/react-use-hover-2.0.0.tgz#3a43f014e832307428dfac1ad6a2b6a170aeb466"
+  integrity sha512-A2OYaC8OnWCD7ZOGbnUX4nJlwr0VEtu1gMnZ5U4w8BoXkwCvBlACgBiUd0Ay+goTqHGq4OSwq4Gxr2x05TQUFA==
+  dependencies:
+    "@types/react" "^16.7.20"
 
 react@18.2.0:
   version "18.2.0"

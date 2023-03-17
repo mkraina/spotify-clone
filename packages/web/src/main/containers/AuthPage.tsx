@@ -13,6 +13,7 @@ const Container = styled.div({
   height: '100vh',
   justifyContent: 'center',
   alignItems: 'center',
+  flex: 1,
 });
 
 const AuthPage: React.FC = () => {
