@@ -3,15 +3,16 @@ import { ComponentProps } from 'react';
 import { ApiProvider } from '../api';
 import { LocalizationProvider } from '../i18n';
 
-type Config = {
-  getLocale: ComponentProps<typeof LocalizationProvider>['detect'];
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ProviderProps<T extends React.FC<any>> = Omit<ComponentProps<T>, 'children'>;
+
+type Config = ProviderProps<typeof ApiProvider> & ProviderProps<typeof LocalizationProvider>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const withSharedProvider = (App: React.FC, config: Config) => {
   return () => (
-    <ApiProvider>
-      <LocalizationProvider detect={config.getLocale}>
+    <ApiProvider LoginPromptComponent={config.LoginPromptComponent}>
+      <LocalizationProvider getLocale={config.getLocale}>
         <App />
       </LocalizationProvider>
     </ApiProvider>

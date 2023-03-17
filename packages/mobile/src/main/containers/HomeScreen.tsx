@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useAccessToken, useUserProfile, useUserTop } from '@spotify-clone/shared/api';
 import { Artist, TopItemsTimeRange, Track } from 'spotify-types';
 
-import { auth } from '../../auth';
 import { AppScreenProps } from '../../navigation';
 import { Screen } from '../components';
 
@@ -86,18 +85,15 @@ const User = React.memo(() => {
 
 export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
   const { t } = useTranslation();
-  const [accessToken, setAccessToken] = useAccessToken();
+  const [, setAccessToken] = useAccessToken();
   const { navigate } = useNavigation();
 
   return (
     <Screen>
       <Text>{t('welcomeMessage')}</Text>
       <Button
-        onPress={useCallback(
-          () => (accessToken ? setAccessToken(undefined) : auth().then(setAccessToken)),
-          [accessToken, setAccessToken]
-        )}
-        title={accessToken ? 'log out' : 'authorize'}
+        onPress={useCallback(() => setAccessToken(undefined), [setAccessToken])}
+        title="log out"
       />
       <Button onPress={useCallback(() => navigate('search', {}), [navigate])} title="search" />
       <User />
