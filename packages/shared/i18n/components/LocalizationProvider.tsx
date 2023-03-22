@@ -25,14 +25,14 @@ const initI18N = (detect: () => string | undefined) => {
 
 export const LocalizationProvider = React.memo<{
   children: React.ReactElement;
-  detect: () => string | undefined;
-}>(({ children, detect }) => {
+  getLocale: () => string | undefined;
+}>(({ children, getLocale }) => {
   const [isInitiated, setIsInitiated] = useState(false);
   useEffect(() => {
-    initI18N(detect)
+    initI18N(getLocale)
       .catch(console.warn)
       .finally(() => setIsInitiated(true));
-  }, [detect]);
+  }, [getLocale]);
   if (!isInitiated) return null;
   return children;
 });

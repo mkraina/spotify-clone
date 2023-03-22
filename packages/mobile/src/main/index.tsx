@@ -6,6 +6,7 @@ import { withSharedProvider } from '@spotify-clone/shared';
 import { getLocale } from '../i18n';
 import { NavigationProvider } from '../navigation';
 
+import { LoginScreen } from './containers/LoginScreen';
 import { RootStack } from './containers/RootStack';
 
 const styles = StyleSheet.create({ container: { flex: 1, backgroundColor: 'red' } });
@@ -20,4 +21,4 @@ const App = React.memo(() => {
   );
 });
 
-export default withSharedProvider(App, { getLocale });
+export default withSharedProvider(App, { getLocale, LoginPromptComponent: LoginScreen });

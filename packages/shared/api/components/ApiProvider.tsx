@@ -21,7 +21,10 @@ const AccessTokenContext = React.createContext<AccessTokenContextProps>(
 );
 export const useAccessToken = () => React.useContext(AccessTokenContext);
 
-export const ApiProvider = React.memo<{ children: React.ReactNode }>(({ children }) => {
+export const ApiProvider = React.memo<{
+  LoginPromptComponent: React.FC;
+  children: React.ReactNode;
+}>(({ children, LoginPromptComponent }) => {
   const accessTokenState = useState<string | undefined>();
   const [accessToken] = accessTokenState;
   useEffect(() => {
@@ -30,7 +33,9 @@ export const ApiProvider = React.memo<{ children: React.ReactNode }>(({ children
   }, [accessToken]);
   return (
     <AccessTokenContext.Provider value={accessTokenState}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {accessToken ? children : <LoginPromptComponent />}
+      </QueryClientProvider>
     </AccessTokenContext.Provider>
   );
 });
