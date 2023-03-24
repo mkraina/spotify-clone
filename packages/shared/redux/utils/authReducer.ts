@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { UserAuthorization } from '../../api/types';
 
-interface AuthState {
+export type AuthState = {
   authorization?: UserAuthorization;
-}
+};
 
 const initialState: AuthState = {};
 

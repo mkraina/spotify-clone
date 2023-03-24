@@ -1,4 +1,4 @@
-import { authActions, dispatch, getState } from '../../redux';
+import { appActions, dispatch, getState } from '../../redux';
 import { UserAuthorization } from '../types';
 
 type RefreshAuth = (userAuthorization: { refreshToken: string }) => Promise<UserAuthorization>;
@@ -17,23 +17,23 @@ export type AuthService = {
 export const createAuthService = ({ authorize, refresh }: Config): AuthService => ({
   authorize: () =>
     authorize()
-      .then(res => dispatch(authActions.setAuthorization(res)))
+      .then(res => dispatch(appActions.setAuthorization(res)))
       .catch(console.error),
   refresh: async () => {
     const currentAuth = getState().auth.authorization;
     if (!currentAuth?.refreshToken) {
-      dispatch(authActions.clearAuthorization());
+      dispatch(appActions.clearAuthorization());
       return;
     }
     try {
       const res = await refresh({ refreshToken: currentAuth.refreshToken });
-      dispatch(authActions.setAuthorization(res));
+      dispatch(appActions.setAuthorization(res));
       return res;
     } catch (e) {
       // TODO: if !res && previous still valid return previous
     }
   },
   logout: () => {
-    dispatch(authActions.clearAuthorization());
+    dispatch(appActions.clearAuthorization());
   },
 });
