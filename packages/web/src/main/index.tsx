@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { withSharedProvider } from '@spotify-clone/shared';
 
-import { refresh } from '../auth';
+import { authService } from '../auth';
 import { getLocale } from '../i18n/utils';
 import { paths, routes } from '../navigation';
 
@@ -47,5 +47,5 @@ const App: React.FC = () => {
 export default withSharedProvider(App, {
   getLocale,
   LoginPromptComponent: AuthPage,
-  refreshAuthorization: refresh,
+  authService,
 });

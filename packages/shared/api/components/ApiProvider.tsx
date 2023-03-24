@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { UserAuthorization } from '../types';
-import { api, RefreshAuth } from '../utils/api';
+import { useAppSelector } from '../../redux';
+import { AuthService } from '../utils';
+import { api } from '../utils/api';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,32 +14,19 @@ export const queryClient = new QueryClient({
   },
 });
 
-type UserAuthorizationContextProps = [
-  UserAuthorization | undefined,
-  React.Dispatch<React.SetStateAction<UserAuthorization | undefined>>
-];
-const UserAuthorizationContext = React.createContext<UserAuthorizationContextProps>(
-  undefined as unknown as UserAuthorizationContextProps
-);
-export const useUserAuthorization = () => React.useContext(UserAuthorizationContext);
-
 export const ApiProvider = React.memo<{
   LoginPromptComponent: React.FC;
+  authService: AuthService;
   children: React.ReactNode;
-  refreshAuthorization: RefreshAuth;
-}>(({ children, LoginPromptComponent, refreshAuthorization }) => {
-  const userAuthorizationState = useState<UserAuthorization | undefined>();
-  const [userAuthorization] = userAuthorizationState;
+}>(({ children, LoginPromptComponent, authService }) => {
+  const userAuthorization = useAppSelector(state => state.auth.authorization);
   useEffect(() => {
     if (!userAuthorization) queryClient.resetQueries().catch(console.warn);
-    api.setToken(userAuthorization);
-    api.setRefreshAuthorization(refreshAuthorization);
-  }, [refreshAuthorization, userAuthorization]);
+    api.setAuthService(authService);
+  }, [authService, authService.refresh, userAuthorization]);
   return (
-    <UserAuthorizationContext.Provider value={userAuthorizationState}>
-      <QueryClientProvider client={queryClient}>
-        {userAuthorization ? children : <LoginPromptComponent />}
-      </QueryClientProvider>
-    </UserAuthorizationContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      {userAuthorization ? children : <LoginPromptComponent />}
+    </QueryClientProvider>
   );
 });

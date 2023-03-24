@@ -1,26 +1,24 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { UserAuthorization } from '../types';
+import { getState } from '../../redux';
 
-export type RefreshAuth = (userAuthorization: {
-  refreshToken: string;
-}) => Promise<UserAuthorization>;
+import { AuthService } from './auth';
+
 type ApiInstance = AxiosInstance & {
-  setRefreshAuthorization: (refresh: RefreshAuth) => void;
-  setToken: (token: UserAuthorization | undefined) => void;
+  setAuthService: (service: AuthService) => void;
 };
 
 const createApi = (): ApiInstance => {
-  let userAuthorization: UserAuthorization | undefined;
-  let refreshAuthorization: RefreshAuth | undefined;
+  let authService: AuthService | undefined;
 
   const getAuthorization = (): string => {
+    const userAuthorization = getState().auth.authorization;
     return userAuthorization ? `Bearer ${userAuthorization.accessToken}` : '';
   };
   const getRetryConfig = async (error: AxiosError): Promise<AxiosRequestConfig | undefined> => {
-    if (error.response?.status !== 401 || !userAuthorization?.refreshToken) return;
-    const newAuth = await refreshAuthorization?.({ refreshToken: userAuthorization.refreshToken });
+    if (error.response?.status !== 401) return;
+    const newAuth = await authService?.refresh();
     if (!newAuth) return;
     error.config?.headers.setAuthorization(getAuthorization());
     return error.config;
@@ -52,8 +50,7 @@ const createApi = (): ApiInstance => {
       return Promise.reject(error);
     }
   );
-  (api as ApiInstance).setToken = userAuth => (userAuthorization = userAuth);
-  (api as ApiInstance).setRefreshAuthorization = refresh => (refreshAuthorization = refresh);
+  (api as ApiInstance).setAuthService = service => (authService = service);
   return api as ApiInstance;
 };
 

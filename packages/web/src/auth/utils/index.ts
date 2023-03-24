@@ -1,11 +1,12 @@
 import {
+  api,
+  createAuthService,
   SPOTIFY_AUTH_CALLBACK_WEB,
   SPOTIFY_AUTH_SCOPES,
   SPOTIFY_AUTHORIZATION_URL,
   SPOTIFY_TOKEN_URL,
 } from '@spotify-clone/shared/api';
 import { UserAuthorization } from '@spotify-clone/shared/api/types';
-import { api, RefreshAuth } from '@spotify-clone/shared/api/utils/api';
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '@spotify-clone/shared/secrets';
 import * as base64 from 'base-64';
 import qs from 'qs';
@@ -74,7 +75,7 @@ const getAuthorization = async (
   return { accessToken: access_token, refreshToken: refresh_token };
 };
 
-export const auth = async (): Promise<UserAuthorization> => {
+const authorize = async (): Promise<UserAuthorization> => {
   const config = {
     response_type: 'code',
     client_id: SPOTIFY_CLIENT_ID,
@@ -109,6 +110,7 @@ export const auth = async (): Promise<UserAuthorization> => {
   }
 };
 
-export const refresh: RefreshAuth = ({ refreshToken }) => {
-  return getAuthorization(refreshToken, 'refresh_token');
-};
+export const authService = createAuthService({
+  authorize,
+  refresh: ({ refreshToken }) => getAuthorization(refreshToken, 'refresh_token'),
+});
