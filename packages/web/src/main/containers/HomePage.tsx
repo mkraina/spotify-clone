@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-no-literals */
 import { useTranslation } from 'react-i18next';
 import { useUserProfile } from '@spotify-clone/shared/api';
 
+import { authService } from '../../auth';
 import { withParams } from '../../navigation/utils';
 import { Page } from '../components/Page';
 
@@ -14,6 +16,8 @@ const HomePage: React.FC = () => {
       <>
         <img src={imgUri} />
         {user.data?.display_name}
+        <button onClick={authService.logout}>logout</button>
+        <button onClick={authService.refresh}>refresh</button>
       </>
     </Page>
   );

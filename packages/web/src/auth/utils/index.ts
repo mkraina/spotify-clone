@@ -55,10 +55,7 @@ const getAuthorization = async (
   token: string,
   grantType: 'authorization_code' | 'refresh_token'
 ): Promise<UserAuthorization> => {
-  const authorization = `Basic ${base64.encode(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`;
-  const {
-    data: { access_token, refresh_token },
-  } = await api.post<AuthResult>(
+  const { data } = await api.post<AuthResult>(
     SPOTIFY_TOKEN_URL,
     {
       grant_type: grantType,
@@ -68,11 +65,14 @@ const getAuthorization = async (
     {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: authorization,
+        Authorization: `Basic ${base64.encode(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)}`,
       },
     }
   );
-  return { accessToken: access_token, refreshToken: refresh_token };
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token || grantType === 'refresh_token' ? token : undefined,
+  };
 };
 
 const authorize = async (): Promise<UserAuthorization> => {

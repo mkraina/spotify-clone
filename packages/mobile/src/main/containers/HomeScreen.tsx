@@ -93,6 +93,8 @@ export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
       <Text>{t('welcomeMessage')}</Text>
       <Button onPress={authService.logout} title="log out" />
       <Button onPress={useCallback(() => navigate('search', {}), [navigate])} title="search" />
+      <Button onPress={authService.logout} title="logout" />
+      <Button onPress={authService.refresh} title="refresh" />
       <User />
       <View style={styles.listsContainer}>
         <TopTracksList range="long_term" />
