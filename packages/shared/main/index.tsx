@@ -11,10 +11,13 @@ type Config = ProviderProps<typeof ApiProvider> & ProviderProps<typeof Localizat
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const withSharedProvider = (App: React.FC, config: Config) => {
   return () => (
-    <ApiProvider LoginPromptComponent={config.LoginPromptComponent}>
-      <LocalizationProvider getLocale={config.getLocale}>
+    <LocalizationProvider getLocale={config.getLocale}>
+      <ApiProvider
+        LoginPromptComponent={config.LoginPromptComponent}
+        refreshAuthorization={config.refreshAuthorization}
+      >
         <App />
-      </LocalizationProvider>
-    </ApiProvider>
+      </ApiProvider>
+    </LocalizationProvider>
   );
 };

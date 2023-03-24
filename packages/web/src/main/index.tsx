@@ -2,12 +2,13 @@ import React from 'react';
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { withSharedProvider } from '@spotify-clone/shared';
 
-import { AuthButton } from '../auth';
+import { refresh } from '../auth';
 import { getLocale } from '../i18n/utils';
 import { paths, routes } from '../navigation';
 
 import AccountPage from './containers/AccountPage';
 import ArtistPage from './containers/ArtistPage';
+import AuthPage from './containers/AuthPage';
 import HomePage from './containers/HomePage';
 import SearchPage from './containers/SearchPage';
 import TrackPage from './containers/TrackPage';
@@ -35,7 +36,7 @@ const App: React.FC = () => {
           <Route Component={ArtistPage} path={paths.artist} />
           <Route Component={SearchPage} path={paths.search} />
           <Route Component={TrackPage} path={paths.track} />
-          <Route Component={null} path="oauth" />
+          <Route Component={AuthPage} path="oauth" />
           <Route element={<Navigate replace to={routes.home} />} path="*" />
         </Routes>
       </div>
@@ -43,4 +44,8 @@ const App: React.FC = () => {
   );
 };
 
-export default withSharedProvider(App, { getLocale, LoginPromptComponent: AuthButton });
+export default withSharedProvider(App, {
+  getLocale,
+  LoginPromptComponent: AuthPage,
+  refreshAuthorization: refresh,
+});

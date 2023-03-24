@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useAccessToken, useUserProfile, useUserTop } from '@spotify-clone/shared/api';
+import { useUserAuthorization, useUserProfile, useUserTop } from '@spotify-clone/shared/api';
 import { Artist, TopItemsTimeRange, Track } from 'spotify-types';
 
 import { AppScreenProps } from '../../navigation';
@@ -85,14 +85,14 @@ const User = React.memo(() => {
 
 export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
   const { t } = useTranslation();
-  const [, setAccessToken] = useAccessToken();
+  const [, setUserAuthorization] = useUserAuthorization();
   const { navigate } = useNavigation();
 
   return (
     <Screen>
       <Text>{t('welcomeMessage')}</Text>
       <Button
-        onPress={useCallback(() => setAccessToken(undefined), [setAccessToken])}
+        onPress={useCallback(() => setUserAuthorization(undefined), [setUserAuthorization])}
         title="log out"
       />
       <Button onPress={useCallback(() => navigate('search', {}), [navigate])} title="search" />

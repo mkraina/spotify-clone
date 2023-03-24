@@ -1,22 +1,27 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import qs from 'qs';
 
-type ApiConfig = {
-  getAccessToken: GetTokenFn;
-  refresh?: () => Promise<boolean>;
+import { UserAuthorization } from '../types';
+
+export type RefreshAuth = (userAuthorization: {
+  refreshToken: string;
+}) => Promise<UserAuthorization>;
+type ApiInstance = AxiosInstance & {
+  setRefreshAuthorization: (refresh: RefreshAuth) => void;
+  setToken: (token: UserAuthorization | undefined) => void;
 };
 
-export type GetTokenFn = () => string | undefined;
-type SetTokenFn = (token: string | undefined) => void;
-type ApiInstance = AxiosInstance & { setToken: SetTokenFn };
-
-const createApi = (props?: ApiConfig): ApiInstance => {
-  let accessToken: string | undefined;
+const createApi = (): ApiInstance => {
+  let userAuthorization: UserAuthorization | undefined;
+  let refreshAuthorization: RefreshAuth | undefined;
 
   const getAuthorization = (): string => {
-    return accessToken ? `Bearer ${accessToken}` : '';
+    return userAuthorization ? `Bearer ${userAuthorization.accessToken}` : '';
   };
   const getRetryConfig = async (error: AxiosError): Promise<AxiosRequestConfig | undefined> => {
-    if (error.response?.status !== 401 || !(await props?.refresh?.())) return;
+    if (error.response?.status !== 401 || !userAuthorization?.refreshToken) return;
+    const newAuth = await refreshAuthorization?.({ refreshToken: userAuthorization.refreshToken });
+    if (!newAuth) return;
     error.config?.headers.setAuthorization(getAuthorization());
     return error.config;
   };
@@ -24,11 +29,12 @@ const createApi = (props?: ApiConfig): ApiInstance => {
     baseURL: 'https://api.spotify.com',
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000, // 10s
+    paramsSerializer: { serialize: params => qs.stringify(params, { arrayFormat: 'comma' }) },
   });
 
   api.interceptors.request.use(
     config => {
-      config.headers.setAuthorization(getAuthorization());
+      if (!config.headers.Authorization) config.headers.setAuthorization(getAuthorization());
       return config;
     },
     error => Promise.reject(error)
@@ -46,7 +52,8 @@ const createApi = (props?: ApiConfig): ApiInstance => {
       return Promise.reject(error);
     }
   );
-  (api as ApiInstance).setToken = token => (accessToken = token);
+  (api as ApiInstance).setToken = userAuth => (userAuthorization = userAuth);
+  (api as ApiInstance).setRefreshAuthorization = refresh => (refreshAuthorization = refresh);
   return api as ApiInstance;
 };
 

@@ -1,3 +1,4 @@
 {
-  "welcomeMessage": "Hello there!"
+  "welcomeMessage": "Hello there!",
+  "loginButton": "Log in"
 }

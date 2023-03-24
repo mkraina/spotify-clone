@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { api } from '../utils/api';
+import { UserAuthorization } from '../types';
+import { api, RefreshAuth } from '../utils/api';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,30 +13,32 @@ export const queryClient = new QueryClient({
   },
 });
 
-type AccessTokenContextProps = [
-  string | undefined,
-  React.Dispatch<React.SetStateAction<string | undefined>>
+type UserAuthorizationContextProps = [
+  UserAuthorization | undefined,
+  React.Dispatch<React.SetStateAction<UserAuthorization | undefined>>
 ];
-const AccessTokenContext = React.createContext<AccessTokenContextProps>(
-  undefined as unknown as AccessTokenContextProps
+const UserAuthorizationContext = React.createContext<UserAuthorizationContextProps>(
+  undefined as unknown as UserAuthorizationContextProps
 );
-export const useAccessToken = () => React.useContext(AccessTokenContext);
+export const useUserAuthorization = () => React.useContext(UserAuthorizationContext);
 
 export const ApiProvider = React.memo<{
   LoginPromptComponent: React.FC;
   children: React.ReactNode;
-}>(({ children, LoginPromptComponent }) => {
-  const accessTokenState = useState<string | undefined>();
-  const [accessToken] = accessTokenState;
+  refreshAuthorization: RefreshAuth;
+}>(({ children, LoginPromptComponent, refreshAuthorization }) => {
+  const userAuthorizationState = useState<UserAuthorization | undefined>();
+  const [userAuthorization] = userAuthorizationState;
   useEffect(() => {
-    if (!accessToken) queryClient.resetQueries().catch(console.warn);
-    api.setToken(accessToken);
-  }, [accessToken]);
+    if (!userAuthorization) queryClient.resetQueries().catch(console.warn);
+    api.setToken(userAuthorization);
+    api.setRefreshAuthorization(refreshAuthorization);
+  }, [refreshAuthorization, userAuthorization]);
   return (
-    <AccessTokenContext.Provider value={accessTokenState}>
+    <UserAuthorizationContext.Provider value={userAuthorizationState}>
       <QueryClientProvider client={queryClient}>
-        {accessToken ? children : <LoginPromptComponent />}
+        {userAuthorization ? children : <LoginPromptComponent />}
       </QueryClientProvider>
-    </AccessTokenContext.Provider>
+    </UserAuthorizationContext.Provider>
   );
 });

@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { withSharedProvider } from '@spotify-clone/shared';
 
+import { refresh } from '../auth';
 import { getLocale } from '../i18n';
 import { NavigationProvider } from '../navigation';
 
@@ -21,4 +22,8 @@ const App = React.memo(() => {
   );
 });
 
-export default withSharedProvider(App, { getLocale, LoginPromptComponent: LoginScreen });
+export default withSharedProvider(App, {
+  getLocale,
+  LoginPromptComponent: LoginScreen,
+  refreshAuthorization: refresh,
+});
