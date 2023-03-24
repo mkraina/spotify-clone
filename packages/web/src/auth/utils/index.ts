@@ -55,6 +55,7 @@ const getAuthorization = async (
   token: string,
   grantType: 'authorization_code' | 'refresh_token'
 ): Promise<UserAuthorization> => {
+  const requestTime = Date.now();
   const { data } = await api.post<AuthResult>(
     SPOTIFY_TOKEN_URL,
     {
@@ -72,6 +73,7 @@ const getAuthorization = async (
   return {
     accessToken: data.access_token,
     refreshToken: data.refresh_token || grantType === 'refresh_token' ? token : undefined,
+    accessTokenExpirationDate: data.expires_in * 1000 + requestTime,
   };
 };
 

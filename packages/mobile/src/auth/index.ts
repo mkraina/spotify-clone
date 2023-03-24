@@ -23,6 +23,10 @@ export const authService = createAuthService({
   authorize: () => authorize(config),
   refresh: async ({ refreshToken }) => {
     const result = await authRefresh(config, { refreshToken });
-    return { refreshToken: result.refreshToken || undefined, accessToken: result.accessToken };
+    return {
+      refreshToken: result.refreshToken || undefined,
+      accessToken: result.accessToken,
+      accessTokenExpirationDate: result.accessTokenExpirationDate,
+    };
   },
 });

@@ -1,5 +1,5 @@
 export type UserAuthorization = {
   accessToken: string;
-  //accessTokenExpirationDate: string;
+  accessTokenExpirationDate: string | number;
   refreshToken: string | undefined;
 };

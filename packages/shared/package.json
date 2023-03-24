@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "axios": "^1.3.4",
+    "date-fns": "^2.29.3",
     "i18next": "*",
     "react-i18next": "*",
     "react-query": "^3.39.3",

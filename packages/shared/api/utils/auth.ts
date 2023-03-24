@@ -1,3 +1,5 @@
+import { differenceInMilliseconds, parseISO } from 'date-fns';
+
 import { appActions, dispatch, getState } from '../../redux';
 import { UserAuthorization } from '../types';
 
@@ -14,6 +16,16 @@ export type AuthService = {
   refresh: () => Promise<UserAuthorization | undefined>;
 };
 
+const getRemainingTokenValidity = (): number => {
+  const { authorization } = getState().auth;
+  if (!authorization) return -1;
+  const expirationTime =
+    typeof authorization.accessTokenExpirationDate === 'string'
+      ? parseISO(authorization.accessTokenExpirationDate)
+      : authorization.accessTokenExpirationDate;
+  return differenceInMilliseconds(expirationTime, Date.now());
+};
+
 export const createAuthService = ({ authorize, refresh }: Config): AuthService => ({
   authorize: () =>
     authorize()
@@ -21,16 +33,14 @@ export const createAuthService = ({ authorize, refresh }: Config): AuthService =
       .catch(console.error),
   refresh: async () => {
     const currentAuth = getState().auth.authorization;
-    if (!currentAuth?.refreshToken) {
-      dispatch(appActions.clearAuthorization());
-      return;
-    }
     try {
+      if (!currentAuth?.refreshToken) throw Error('No refreshToken');
       const res = await refresh({ refreshToken: currentAuth.refreshToken });
       dispatch(appActions.setAuthorization(res));
       return res;
     } catch (e) {
-      // TODO: if !res && previous still valid return previous
+      if (getRemainingTokenValidity() > 0) return currentAuth;
+      dispatch(appActions.clearAuthorization());
     }
   },
   logout: () => {
