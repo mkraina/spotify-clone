@@ -1,22 +1,25 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import qs from 'qs';
 
-type ApiConfig = {
-  getAccessToken: GetTokenFn;
-  refresh?: () => Promise<boolean>;
+import { getState } from '../../redux';
+
+import { AuthService } from './auth';
+
+type ApiInstance = AxiosInstance & {
+  setAuthService: (service: AuthService) => void;
 };
 
-export type GetTokenFn = () => string | undefined;
-type SetTokenFn = (token: string | undefined) => void;
-type ApiInstance = AxiosInstance & { setToken: SetTokenFn };
-
-const createApi = (props?: ApiConfig): ApiInstance => {
-  let accessToken: string | undefined;
+const createApi = (): ApiInstance => {
+  let authService: AuthService | undefined;
 
   const getAuthorization = (): string => {
-    return accessToken ? `Bearer ${accessToken}` : '';
+    const userAuthorization = getState().auth.authorization;
+    return userAuthorization ? `Bearer ${userAuthorization.accessToken}` : '';
   };
   const getRetryConfig = async (error: AxiosError): Promise<AxiosRequestConfig | undefined> => {
-    if (error.response?.status !== 401 || !(await props?.refresh?.())) return;
+    if (error.response?.status !== 401) return;
+    const newAuth = await authService?.refresh();
+    if (!newAuth) return;
     error.config?.headers.setAuthorization(getAuthorization());
     return error.config;
   };
@@ -24,11 +27,12 @@ const createApi = (props?: ApiConfig): ApiInstance => {
     baseURL: 'https://api.spotify.com',
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000, // 10s
+    paramsSerializer: { serialize: params => qs.stringify(params, { arrayFormat: 'comma' }) },
   });
 
   api.interceptors.request.use(
     config => {
-      config.headers.setAuthorization(getAuthorization());
+      if (!config.headers.Authorization) config.headers.setAuthorization(getAuthorization());
       return config;
     },
     error => Promise.reject(error)
@@ -46,7 +50,7 @@ const createApi = (props?: ApiConfig): ApiInstance => {
       return Promise.reject(error);
     }
   );
-  (api as ApiInstance).setToken = token => (accessToken = token);
+  (api as ApiInstance).setAuthService = service => (authService = service);
   return api as ApiInstance;
 };
 

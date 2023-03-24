@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import { useAppSelector } from '../../redux';
+import { AuthService } from '../utils';
 import { api } from '../utils/api';
 
 export const queryClient = new QueryClient({
@@ -12,30 +14,19 @@ export const queryClient = new QueryClient({
   },
 });
 
-type AccessTokenContextProps = [
-  string | undefined,
-  React.Dispatch<React.SetStateAction<string | undefined>>
-];
-const AccessTokenContext = React.createContext<AccessTokenContextProps>(
-  undefined as unknown as AccessTokenContextProps
-);
-export const useAccessToken = () => React.useContext(AccessTokenContext);
-
 export const ApiProvider = React.memo<{
   LoginPromptComponent: React.FC;
+  authService: AuthService;
   children: React.ReactNode;
-}>(({ children, LoginPromptComponent }) => {
-  const accessTokenState = useState<string | undefined>();
-  const [accessToken] = accessTokenState;
+}>(({ children, LoginPromptComponent, authService }) => {
+  const userAuthorization = useAppSelector(state => state.auth.authorization);
   useEffect(() => {
-    if (!accessToken) queryClient.resetQueries().catch(console.warn);
-    api.setToken(accessToken);
-  }, [accessToken]);
+    if (!userAuthorization) queryClient.resetQueries().catch(console.warn);
+    api.setAuthService(authService);
+  }, [authService, authService.refresh, userAuthorization]);
   return (
-    <AccessTokenContext.Provider value={accessTokenState}>
-      <QueryClientProvider client={queryClient}>
-        {accessToken ? children : <LoginPromptComponent />}
-      </QueryClientProvider>
-    </AccessTokenContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      {userAuthorization ? children : <LoginPromptComponent />}
+    </QueryClientProvider>
   );
 });

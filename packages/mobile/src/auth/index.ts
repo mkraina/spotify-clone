@@ -1,5 +1,6 @@
-import { AuthConfiguration, authorize } from 'react-native-app-auth';
+import { AuthConfiguration, authorize, refresh as authRefresh } from 'react-native-app-auth';
 import {
+  createAuthService,
   SPOTIFY_AUTH_CALLBACK_MOBILE,
   SPOTIFY_AUTH_SCOPES,
   SPOTIFY_AUTHORIZATION_URL,
@@ -18,11 +19,14 @@ const config: AuthConfiguration = {
   },
 };
 
-export const auth = async () => {
-  try {
-    const { accessToken } = await authorize(config);
-    return accessToken;
-  } catch (e) {
-    console.warn(e);
-  }
-};
+export const authService = createAuthService({
+  authorize: () => authorize(config),
+  refresh: async ({ refreshToken }) => {
+    const result = await authRefresh(config, { refreshToken });
+    return {
+      refreshToken: result.refreshToken || undefined,
+      accessToken: result.accessToken,
+      accessTokenExpirationDate: result.accessTokenExpirationDate,
+    };
+  },
+});
