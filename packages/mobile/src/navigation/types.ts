@@ -4,7 +4,6 @@ import { ScreenName, ScreenParamList } from '@spotify-clone/shared/navigation';
 type ParamList<T extends ScreenName> = Pick<ScreenParamList, T>;
 
 export type RootStackParamList = ParamList<'account' | 'artist' | 'home' | 'search' | 'track'>;
-
 export type AppParamList = RootStackParamList;
 
 export type AppScreenName = keyof AppParamList;

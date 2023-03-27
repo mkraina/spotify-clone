@@ -1,11 +1,14 @@
+/* eslint-disable react/jsx-no-literals */
 import React, { useCallback, useMemo } from 'react';
-import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useUserProfile, useUserTop } from '@spotify-clone/shared/api';
 import { Artist, TopItemsTimeRange, Track } from 'spotify-types';
 
 import { authService } from '../../auth';
 import { AppScreenProps } from '../../navigation';
+import { StyleSheet } from '../../ui';
 import { Screen } from '../components';
 
 const styles = StyleSheet.create({
@@ -88,10 +91,14 @@ export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
 
   return (
     <Screen>
-      <Button onPress={authService.logout} title="log out" />
-      <Button onPress={useCallback(() => navigate('search', {}), [navigate])} title="search" />
-      <Button onPress={authService.logout} title="logout" />
-      <Button onPress={authService.refresh} title="refresh" />
+      <Button mode="contained" onPress={authService.logout}>
+        log out
+      </Button>
+      <Button mode="elevated" onPress={useCallback(() => navigate('search', {}), [navigate])}>
+        search
+      </Button>
+      <Button onPress={authService.logout}>logout</Button>
+      <Button onPress={authService.refresh}>refresh</Button>
       <User />
       <View style={styles.listsContainer}>
         <TopTracksList range="long_term" />
