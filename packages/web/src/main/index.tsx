@@ -36,7 +36,6 @@ const App: React.FC = () => {
           <Route Component={ArtistPage} path={paths.artist} />
           <Route Component={SearchPage} path={paths.search} />
           <Route Component={TrackPage} path={paths.track} />
-          <Route Component={AuthPage} path="oauth" />
           <Route element={<Navigate replace to={routes.home} />} path="*" />
         </Routes>
       </div>

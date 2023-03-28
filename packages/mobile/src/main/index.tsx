@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { withSharedProvider } from '@spotify-clone/shared';
 
@@ -7,26 +6,33 @@ import { authService } from '../auth';
 import { getLocale } from '../i18n';
 import { NavigationProvider } from '../navigation';
 import { encryptedStorage, storage } from '../storage';
+import { StyleSheet } from '../ui';
+import { UiProvider } from '../ui/Provider';
 
-import { LoginScreen } from './containers/LoginScreen';
+import { AuthStack } from './containers/AuthStack';
 import { RootStack } from './containers/RootStack';
 
-const styles = StyleSheet.create({ container: { flex: 1, backgroundColor: 'red' } });
+const styles = StyleSheet.create({ container: { flex: 1 } });
 
-const App = React.memo(() => {
-  return (
-    <GestureHandlerRootView style={styles.container}>
+const App = withSharedProvider(
+  React.memo(() => {
+    return <RootStack />;
+  }),
+  {
+    getLocale,
+    LoginPromptComponent: AuthStack,
+    authService,
+    storage,
+    encryptedStorage,
+  }
+);
+
+export default React.memo(() => (
+  <GestureHandlerRootView style={styles.container}>
+    <UiProvider>
       <NavigationProvider>
-        <RootStack />
+        <App />
       </NavigationProvider>
-    </GestureHandlerRootView>
-  );
-});
-
-export default withSharedProvider(App, {
-  getLocale,
-  LoginPromptComponent: LoginScreen,
-  authService,
-  storage,
-  encryptedStorage,
-});
+    </UiProvider>
+  </GestureHandlerRootView>
+));
