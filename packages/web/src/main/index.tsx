@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { Box } from '@mui/system';
 import { withSharedProvider } from '@spotify-clone/shared';
 
 import { authService } from '../auth';
@@ -12,8 +13,12 @@ import { Router } from './containers/Router';
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <MainDrawer />
-      <Router />
+      <Box flexDirection="column" flexGrow={1} height="100vh">
+        <Box flex={1} flexDirection="row">
+          <MainDrawer />
+          <Router />
+        </Box>
+      </Box>
     </BrowserRouter>
   );
 };

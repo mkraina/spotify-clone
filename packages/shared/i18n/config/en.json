@@ -3,5 +3,6 @@
   "loginButton": "Log in",
   "mainNavigatorBarHome": "Home",
   "mainNavigatorBarSearch": "Search",
-  "mainNavigatorBarCollections": "Your Library"
+  "mainNavigatorBarCollections": "Your Library",
+  "searchInputPlaceholder": "What do you want to listen to?"
 }
