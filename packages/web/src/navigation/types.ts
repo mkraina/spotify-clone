@@ -10,6 +10,8 @@ export type Paths = {
       `/${P}/:${keyof ScreenParamList[P]}${'?' | ''}`;
 };
 
+export type PathName = '/' | `/${Exclude<ScreenName, 'home'>}/`;
+
 export type Routes = {
   [P in ScreenName]: ScreenParamList[P] extends undefined
     ? P extends 'home'

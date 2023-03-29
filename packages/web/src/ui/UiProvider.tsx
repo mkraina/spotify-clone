@@ -3,6 +3,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { palette, spacing } from '@spotify-clone/shared/ui';
 
+const drawerWidth = 240;
+
 const theme = createTheme({
   components: {
     MuiButton: {
@@ -11,6 +13,18 @@ const theme = createTheme({
     },
     MuiCard: {
       styleOverrides: { root: { borderRadius: 16 } },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        },
+      },
     },
   },
   palette,

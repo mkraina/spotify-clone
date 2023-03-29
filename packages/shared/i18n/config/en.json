@@ -1,4 +1,7 @@
 {
   "loginScreenMessage": "Start listening with a free Spotify account",
-  "loginButton": "Log in"
+  "loginButton": "Log in",
+  "mainNavigatorBarHome": "Home",
+  "mainNavigatorBarSearch": "Search",
+  "mainNavigatorBarCollections": "Your Library"
 }
