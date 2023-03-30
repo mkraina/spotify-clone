@@ -1,12 +1,9 @@
-import { adaptNavigationTheme, MD3DarkTheme } from 'react-native-paper';
+import { MD3DarkTheme } from 'react-native-paper';
 import { InternalTheme } from 'react-native-paper/lib/typescript/src/types';
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from '@react-navigation/native';
+import { Theme as NavigationTheme } from '@react-navigation/native';
 import { palette } from '@spotify-clone/shared/ui';
 
-const appTheme: InternalTheme = {
+export const theme: InternalTheme = {
   ...MD3DarkTheme,
   dark: true,
   colors: {
@@ -53,16 +50,14 @@ const appTheme: InternalTheme = {
   },
 };
 
-const { DarkTheme } = adaptNavigationTheme({
-  reactNavigationLight: NavigationDefaultTheme,
-  reactNavigationDark: NavigationDarkTheme,
-});
-
-export const theme = {
-  ...DarkTheme,
-  ...appTheme,
+export const navigationTheme: NavigationTheme = {
+  dark: true,
   colors: {
-    ...DarkTheme.colors,
-    ...appTheme.colors,
+    primary: theme.colors.primary,
+    background: theme.colors.background,
+    card: theme.colors.background,
+    text: theme.colors.onPrimary,
+    border: theme.colors.outline,
+    notification: theme.colors.secondary,
   },
 };

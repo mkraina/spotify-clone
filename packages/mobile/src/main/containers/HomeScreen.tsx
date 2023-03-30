@@ -90,7 +90,7 @@ export const HomeScreen = React.memo<AppScreenProps<'home'>>(() => {
   const { navigate } = useNavigation();
 
   return (
-    <Screen>
+    <Screen type="scroll">
       <Button mode="contained" onPress={authService.logout}>
         log out
       </Button>

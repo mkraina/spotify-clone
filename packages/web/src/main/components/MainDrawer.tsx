@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
+import Bookmark from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import Home from '@mui/icons-material/Home';
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
 import Search from '@mui/icons-material/Search';
@@ -33,9 +33,9 @@ const Space = styled.div<{ size: number }>(({ size }) => ({ height: spacing(size
 const icons: Partial<Record<ScreenName, typeof SvgIcon>> = {
   home: HomeOutlined,
   search: Search,
-  collection: CollectionsBookmarkOutlinedIcon,
+  collection: BookmarkBorderIcon,
 };
-const activeIcons: typeof icons = { home: Home, collection: CollectionsBookmarkIcon };
+const activeIcons: typeof icons = { home: Home, collection: Bookmark };
 const labelKeys: Partial<Record<ScreenName, TranslationKey>> = {
   home: 'mainNavigatorBarHome',
   search: 'mainNavigatorBarSearch',

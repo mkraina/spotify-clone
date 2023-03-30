@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 export const LoginScreen = React.memo(() => {
   const { t } = useTranslation();
   return (
-    <Screen showHeader={false} contentStyle={styles.container}>
+    <Screen showHeader={false} contentContainerStyle={styles.container} type="static">
       <SafeArea.Top />
       <Card style={styles.card}>
         <Text variant="titleLarge" style={styles.title}>
