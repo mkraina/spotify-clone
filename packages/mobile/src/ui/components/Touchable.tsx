@@ -2,11 +2,16 @@ import React, { ComponentProps, useMemo } from 'react';
 import { TouchableNativeFeedback } from 'react-native';
 import { TouchableRipple, useTheme } from 'react-native-paper';
 
+import { ColorKey } from '../hooks';
+
 export const Touchable = React.memo<
-  { color?: string } & Omit<ComponentProps<typeof TouchableRipple>, 'rippleColor' | 'underlayColor'>
+  { color?: ColorKey } & Omit<
+    ComponentProps<typeof TouchableRipple>,
+    'rippleColor' | 'underlayColor'
+  >
 >(props => {
   const theme = useTheme();
-  const color = props.color ?? theme.colors.onBackground;
+  const color = theme.colors[props.color ?? 'onBackground'];
   return (
     <TouchableRipple
       background={useMemo(() => TouchableNativeFeedback.Ripple(color, true), [color])}

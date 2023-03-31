@@ -7,6 +7,7 @@ export const routes: Routes = {
   search: ({ query }) => `/search/${query ?? ''}`,
   track: ({ id }) => `/track/${id}`,
   collection: ({ type }) => `/collection/${type ?? ''}`,
+  album: ({ id }) => `/album/${id}`,
 };
 
 export const paths: Paths = {
@@ -16,4 +17,5 @@ export const paths: Paths = {
   search: '/search/:query?',
   track: '/track/:id',
   collection: '/collection/:type?',
+  album: '/album/:id',
 };

@@ -7,14 +7,14 @@ import { IconProps as VectorIconProps } from 'react-native-vector-icons/Icon';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { Theme } from '../hooks';
+import { ColorKey } from '../hooks';
 
 import { Touchable } from './Touchable';
 
 export type IconName = keyof (typeof materialIconsGlyphMap & typeof materialCommunityIconsGlyphMap);
 export type IconProps = Omit<VectorIconProps, 'color'> & {
   name: IconName;
-  color?: keyof Omit<Theme['colors'], 'elevation'>;
+  color?: ColorKey;
   contentStyle?: StyleProp<ViewStyle>;
 };
 const IconBase = React.memo<VectorIconProps>(props => {
@@ -27,7 +27,7 @@ export const Icon = React.memo<IconProps>(
   ({ onPress, color = 'onBackground', size = 24, style, contentStyle, ...iconProps }) => {
     const finalColor = useTheme().colors[color];
     return (
-      <Touchable color={finalColor} onPress={onPress} style={style}>
+      <Touchable color={color} onPress={onPress} style={style}>
         <IconBase {...iconProps} color={finalColor} size={size} style={contentStyle} />
       </Touchable>
     );

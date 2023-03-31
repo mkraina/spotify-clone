@@ -9,16 +9,16 @@ import { MainTabParamList } from '../../navigation';
 import { Touchable } from '../../ui';
 import { TabBarBackground, TabBarIcon, TabBarLabel } from '../components/TabBarComponents';
 
-import { CollectionScreen } from './CollectionScreen';
-import { HomeScreen } from './HomeScreen';
-import { SearchScreen } from './SearchScreen';
+import { CollectionsStack } from './CollectionsStack';
+import { HomeStack } from './HomeStack';
+import { SearchStack } from './SearchStack';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const options = ({
   route,
 }: {
-  route: RouteProp<MainTabParamList, 'home' | 'search' | 'collection'>;
+  route: RouteProp<MainTabParamList, keyof MainTabParamList>;
 }): BottomTabNavigationOptions => ({
   headerShown: false,
   tabBarStyle: {
@@ -35,9 +35,9 @@ const options = ({
 export const MainTabs = React.memo(() => {
   return (
     <Tab.Navigator screenOptions={options}>
-      <Tab.Screen name="home" component={HomeScreen} />
-      <Tab.Screen name="search" component={SearchScreen} />
-      <Tab.Screen name="collection" component={CollectionScreen} />
+      <Tab.Screen name="homeStack" component={HomeStack} />
+      <Tab.Screen name="searchStack" component={SearchStack} />
+      <Tab.Screen name="collectionsStack" component={CollectionsStack} />
     </Tab.Navigator>
   );
 });

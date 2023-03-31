@@ -23,19 +23,19 @@ const styles = StyleSheet.create({
 type RouteName = keyof MainTabParamList;
 
 const icons: Record<RouteName, IconName> = {
-  home: 'home-outline',
-  search: 'search',
-  collection: 'bookmark-outline',
+  homeStack: 'home-outline',
+  searchStack: 'search',
+  collectionsStack: 'bookmark-outline',
 };
 const activeIcons: typeof icons = {
-  home: 'home',
-  search: 'search',
-  collection: 'bookmark',
+  homeStack: 'home',
+  searchStack: 'search',
+  collectionsStack: 'bookmark',
 };
 const labelKeys: Record<RouteName, TranslationKey> = {
-  home: 'mainNavigatorBarHome',
-  search: 'mainNavigatorBarSearch',
-  collection: 'mainNavigatorBarCollections',
+  homeStack: 'mainNavigatorBarHome',
+  searchStack: 'mainNavigatorBarSearch',
+  collectionsStack: 'mainNavigatorBarCollections',
 };
 
 const useTabBarContentStyle = (focused: boolean) =>

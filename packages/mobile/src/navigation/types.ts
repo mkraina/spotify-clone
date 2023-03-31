@@ -4,13 +4,30 @@ import { ScreenName, ScreenParamList } from '@spotify-clone/shared/navigation';
 
 type ParamList<T extends ScreenName> = Pick<ScreenParamList, T>;
 
-export type MainTabParamList = ParamList<'home' | 'search' | 'collection'>;
+type SharedStackParamList<
+  Initial extends ScreenName | string,
+  Extra extends ScreenName = ScreenName
+> = (Initial extends ScreenName
+  ? ScreenParamList[Initial] extends undefined
+    ? ParamList<Initial>
+    : ParamList<Initial> | Record<Initial, undefined>
+  : Record<Initial, undefined>) &
+  ParamList<'artist' | 'album' | Extra>;
 
-export type RootStackParamList = ParamList<'account' | 'artist' | 'track'> & {
+export type HomeStackParamList = SharedStackParamList<'home'>;
+export type SearchStackParamList = SharedStackParamList<'searchInit', 'search'>;
+export type CollectionsStackParamList = SharedStackParamList<'collection'>;
+export type MainTabParamList = Record<'homeStack' | 'searchStack' | 'collectionsStack', undefined>;
+
+export type RootStackParamList = ParamList<'account' | 'track'> & {
   mainTabs: undefined;
 };
 
-export type AppParamList = RootStackParamList & MainTabParamList;
+export type AppParamList = RootStackParamList &
+  MainTabParamList &
+  HomeStackParamList &
+  SearchStackParamList &
+  CollectionsStackParamList;
 
 export type AppScreenName = keyof AppParamList;
 
