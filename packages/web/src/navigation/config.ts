@@ -4,7 +4,7 @@ export const routes: Routes = {
   account: '/account',
   artist: ({ id }) => `/artist/${id}`,
   home: '/',
-  search: ({ query }) => `/search/${query ?? ''}`,
+  search: ({ query }) => `/search/${query?.replace(/\s/g, '%20') ?? ''}`,
   track: ({ id }) => `/track/${id}`,
   collection: ({ type }) => `/collection/${type ?? ''}`,
   album: ({ id }) => `/album/${id}`,

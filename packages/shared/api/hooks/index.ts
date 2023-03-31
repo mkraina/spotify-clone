@@ -1,19 +1,22 @@
-import { useQuery } from 'react-query';
-import { Artist, Paging, PrivateUser, TopItemsTimeRange, TopItemsType, Track } from 'spotify-types';
-
-import { userQueryKey } from '../keyFactory';
-import { api } from '../utils/api';
-
-export const useUserProfile = () =>
-  useQuery(userQueryKey.userProfile, async () => (await api.get<PrivateUser>('/v1/me')).data);
-
-export const useUserTop = <T extends TopItemsType>(topItemType: T, timeRange?: TopItemsTimeRange) =>
-  useQuery(
-    userQueryKey.userTop(topItemType, timeRange),
-    async ({ queryKey: [, , { type, range }] }) =>
-      (
-        await api.get<Paging<T extends 'artists' ? Artist : Track>>(`/v1/me/top/${type}`, {
-          params: { time_range: range },
-        })
-      ).data
-  );
+export * from './useAlbum';
+export * from './useAlbumTracks';
+export * from './useArtist';
+export * from './useArtistsAlbums';
+export * from './useArtistsRelatedArtists';
+export * from './useArtistsTopTracks';
+export * from './useBrowseCategories';
+export * from './useCategoryPlaylists';
+export * from './useCurrentUserPlaylists';
+export * from './useFeaturedPlaylists';
+export * from './useFollowedArtists';
+export * from './useNewAlbums';
+export * from './usePlaylist';
+export * from './usePlaylistItems';
+export * from './useRecentlyPlayedTracks';
+export * from './useRecommendations';
+export * from './useSavedAlbums';
+export * from './useSavedTracks';
+export * from './useSearch';
+export * from './useUserPlaylists';
+export * from './useUserProfile';
+export * from './useUserTopItems';

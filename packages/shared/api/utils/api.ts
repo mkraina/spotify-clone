@@ -24,7 +24,7 @@ const createApi = (): ApiInstance => {
     return error.config;
   };
   const api = axios.create({
-    baseURL: 'https://api.spotify.com',
+    baseURL: 'https://api.spotify.com/v1',
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000, // 10s
     paramsSerializer: { serialize: params => qs.stringify(params, { arrayFormat: 'comma' }) },
