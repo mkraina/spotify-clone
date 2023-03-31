@@ -26,7 +26,7 @@ const AuthPage: React.FC = () => {
       <Card>
         <CardContent>
           <Stack alignItems="center">
-            <Title>{t('loginScreenMessage')}</Title>
+            <Title>{t('loginPageMessage')}</Title>
             <Button onClick={authService.authorize}>{t('loginButton')}</Button>
           </Stack>
         </CardContent>

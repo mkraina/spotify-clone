@@ -1,5 +1,4 @@
 import React from 'react';
-import { TouchableRipple } from 'react-native-paper';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
@@ -7,6 +6,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 
 import { MainTabParamList } from '../../navigation';
+import { Touchable } from '../../ui';
 import { TabBarBackground, TabBarIcon, TabBarLabel } from '../components/TabBarComponents';
 
 import { CollectionScreen } from './CollectionScreen';
@@ -26,7 +26,7 @@ const options = ({
     backgroundColor: 'transparent',
     borderTopWidth: 0,
   },
-  tabBarButton: props => <TouchableRipple {...props} />,
+  tabBarButton: props => <Touchable {...props} />,
   tabBarIcon: props => <TabBarIcon {...props} route={route.name} />,
   tabBarLabel: props => <TabBarLabel {...props} route={route.name} />,
   tabBarBackground: () => <TabBarBackground />,

@@ -1,8 +1,12 @@
 {
-  "loginScreenMessage": "Start listening with a free Spotify account",
+  "loginPageMessage": "Start listening with a free Spotify account",
   "loginButton": "Log in",
   "mainNavigatorBarHome": "Home",
   "mainNavigatorBarSearch": "Search",
   "mainNavigatorBarCollections": "Your Library",
-  "searchInputPlaceholder": "What do you want to listen to?"
+  "searchInputPlaceholder": "What do you want to listen to?",
+  "homePageTitleMorning": "Good morning",
+  "homePageTitleEvening": "Good evening",
+  "collectionPageTitle": "Your library",
+  "searchPageTitle": "Search"
 }
