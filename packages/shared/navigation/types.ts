@@ -1,6 +1,8 @@
 export type ScreenParamList = {
   account: undefined;
+  album: { id: string };
   artist: { id: string };
+  collection: { type?: 'playlists' | 'podcasts' | 'artists' | 'albums' };
   home: undefined;
   search: { query?: string };
   track: { id: string };

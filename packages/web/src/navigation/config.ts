@@ -6,6 +6,8 @@ export const routes: Routes = {
   home: '/',
   search: ({ query }) => `/search/${query ?? ''}`,
   track: ({ id }) => `/track/${id}`,
+  collection: ({ type }) => `/collection/${type ?? ''}`,
+  album: ({ id }) => `/album/${id}`,
 };
 
 export const paths: Paths = {
@@ -14,4 +16,6 @@ export const paths: Paths = {
   home: '/',
   search: '/search/:query?',
   track: '/track/:id',
+  collection: '/collection/:type?',
+  album: '/album/:id',
 };

@@ -1,40 +1,37 @@
-import React, { PropsWithChildren, useMemo } from 'react';
-import { Button, StyleProp, Text, View, ViewStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { FlatList, FlatListProps, ScrollView, ScrollViewProps, Text, View } from 'react-native';
 
-import { useIsFirstInStack } from '../../navigation';
-import { SafeArea, StatusBar, StyleSheet } from '../../ui';
+import { BottomTabBarPlaceholder, StatusBar, StyleSheet } from '../../ui';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { alignSelf: 'stretch', flexDirection: 'row' },
 });
 
-type Props = PropsWithChildren & {
-  contentStyle?: StyleProp<ViewStyle>;
-  showHeader?: boolean;
-  title?: string;
-};
+type ListProps = { type: 'list' } & FlatListProps<unknown>;
+type ScrollProps = { type?: 'scroll' | 'static' } & ScrollViewProps;
 
-export const Screen = React.memo<Props>(({ children, showHeader = true, title, contentStyle }) => {
-  const hideBackButton = useIsFirstInStack();
-  const { goBack } = useNavigation();
+type Props = ScrollProps | ListProps;
 
+const colors = ['red', 'blue'];
+
+export const Screen = React.memo<Props>(props => {
   return (
     <View style={styles.container}>
       <StatusBar />
-      {showHeader && (
-        <>
-          <SafeArea.Top />
-          <View style={styles.header}>
-            {!hideBackButton && <Button onPress={goBack} title="go back" />}
-            {!!title && <Text>{title}</Text>}
-          </View>
-        </>
+      {props.type === 'list' ? (
+        <FlatList {...props} />
+      ) : (
+        <ScrollView scrollEnabled={props.type !== 'static'} {...props}>
+          {props.children ||
+            new Array(50).fill(1).map((_, i) => (
+              // eslint-disable-next-line react-memo/require-usememo, react-perf/jsx-no-new-object-as-prop
+              <Text key={i} style={{ backgroundColor: colors[i % 2], height: 48 }}>
+                {i + 1}
+              </Text>
+            ))}
+          <BottomTabBarPlaceholder />
+        </ScrollView>
       )}
-      <View style={useMemo(() => [styles.container, contentStyle], [contentStyle])}>
-        {children}
-      </View>
     </View>
   );
 });

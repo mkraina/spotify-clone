@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { StyleSheet as RNStyleSheet } from 'react-native';
 import { MD3Theme, useTheme } from 'react-native-paper';
 
-type Theme = MD3Theme;
+export type Theme = MD3Theme;
+export type ColorKey = keyof Omit<Theme['colors'], 'elevation'>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type NamedStyles<T> = RNStyleSheet.NamedStyles<T> | RNStyleSheet.NamedStyles<any>;

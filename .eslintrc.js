@@ -91,6 +91,7 @@ module.exports = {
         ],
       },
     ],
+    'react/self-closing-comp': 'error',
     'react/jsx-sort-props': [
       'error',
       {
