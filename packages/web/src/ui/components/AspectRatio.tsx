@@ -1,7 +1,6 @@
-import { PropsWithChildren } from 'react';
+import { Box, BoxProps } from '@mui/material';
 import styled from 'styled-components';
 
-const Root = styled.div({ position: 'relative' });
 const Wrapper = styled.div({
   position: 'absolute',
   top: 0,
@@ -10,18 +9,16 @@ const Wrapper = styled.div({
   bottom: 0,
   '& > *': { height: '100%', width: '100%' },
 });
-const Padding = styled.div<{ ratio: number }>(({ ratio }) => ({
-  paddingBottom: `${(1 / ratio) * 100}%`,
-}));
 
-export const AspectRatio: React.FC<PropsWithChildren & { ratio?: number }> = ({
+export const AspectRatio: React.FC<BoxProps & { ratio?: number }> = ({
   children,
   ratio = 1,
+  ...props
 }) => {
   return (
-    <Root className="root">
-      <Wrapper className="wrapper">{children}</Wrapper>
-      <Padding ratio={ratio} />
-    </Root>
+    <Box {...props} position="relative">
+      <Wrapper>{children}</Wrapper>
+      <Box paddingBottom={`${(1 / ratio) * 100}%`} />
+    </Box>
   );
 };

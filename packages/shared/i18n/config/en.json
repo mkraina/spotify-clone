@@ -18,5 +18,7 @@
   "albumsTitle": "Albums",
   "artistsTitle": "Artists",
   "showsTitle": "Podcasts",
-  "tracksTitle": "Songs"
+  "tracksTitle": "Songs",
+  "episodeCardSubTitle": "{{releaseDate}} · {{duration}} Min",
+  "artistCardSubtitle": "Artist"
 }

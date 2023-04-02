@@ -1,14 +1,17 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Chip, styled, useMediaQuery } from '@mui/material';
+import { Box, Chip, styled, Typography, useMediaQuery } from '@mui/material';
 import { useSearch } from '@spotify-clone/shared/api';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
 import { useSearchFilters } from '@spotify-clone/shared/search';
 import { SearchContent } from 'spotify-types';
 
+import { AlbumCard } from '../../albums';
 import { ArtistCard } from '../../artists';
 import { routes, withParams } from '../../navigation';
+import { ShowCard } from '../../shows';
+import { EpisodeCard } from '../../shows/components/EpisodeCard';
 import { SearchBar } from '../../ui';
 import { Page } from '../components/Page';
 
@@ -32,6 +35,12 @@ const ResultItem: React.FC<{
   switch (item.type) {
     case 'artist':
       return <ArtistCard artist={item} />;
+    case 'album':
+      return <AlbumCard album={item} />;
+    case 'episode':
+      return <EpisodeCard episode={item} />;
+    case 'show':
+      return <ShowCard show={item} />;
     default:
       return null;
   }
@@ -51,8 +60,8 @@ const Section: React.FC<{ data: SearchContent; type: keyof SearchContent }> = ({
 
   return (
     <Box flexDirection="column" padding={3}>
-      <h2>{t(sectionTitleKeys[type])}</h2>
-      <Box margin={-1.5}>
+      <Typography variant="h5">{t(sectionTitleKeys[type])}</Typography>
+      <Box margin={-1.5} marginTop={0}>
         {data[type]?.items.slice(0, xs ? 1 : sm ? 2 : md ? 3 : lg ? 4 : xl ? 5 : 7).map(i => (
           <Box key={i.id} flex={1} padding={1.5}>
             <ResultItem item={i} />
@@ -64,7 +73,14 @@ const Section: React.FC<{ data: SearchContent; type: keyof SearchContent }> = ({
 };
 
 const Results: React.FC<{ data: SearchContent }> = ({ data }) => {
-  return <Section data={data} type="artists" />;
+  return (
+    <>
+      <Section data={data} type="artists" />
+      <Section data={data} type="albums" />
+      <Section data={data} type="shows" />
+      <Section data={data} type="episodes" />
+    </>
+  );
 };
 
 export default withParams<'search'>(({ params }) => {
