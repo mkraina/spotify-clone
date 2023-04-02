@@ -5,7 +5,7 @@ import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import { Avatar, Box, Card as MaterialCard, Fab, Link, Typography } from '@mui/material';
 import styled from 'styled-components';
 
-import { routes } from '../../navigation';
+import { routes, stopEventPropagation } from '../../navigation';
 
 import { AspectRatio } from './AspectRatio';
 
@@ -56,7 +56,7 @@ export const Card: React.FC<{
           <StyledAvatar rounded={!!props.roundAvatar} src={props.image} />
           {!!props.trackId && (
             <PlayButtonContainer visible={isHovering}>
-              <Fab href={routes.track({ id: props.trackId })}>
+              <Fab href={routes.track({ id: props.trackId })} onClick={stopEventPropagation}>
                 <PlayArrowRounded fontSize="large" />
               </Fab>
             </PlayButtonContainer>

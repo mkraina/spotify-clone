@@ -1,12 +1,8 @@
-import { MouseEventHandler } from 'react';
 import { Link } from '@mui/material';
 import { SimplifiedAlbum } from 'spotify-types';
 
-import { routes } from '../../navigation';
+import { routes, stopEventPropagation } from '../../navigation';
 import { Card } from '../../ui';
-
-const stopPropagation: MouseEventHandler<HTMLAnchorElement> &
-  MouseEventHandler<HTMLSpanElement> = e => e.stopPropagation();
 
 export const AlbumCard: React.FC<{ album: SimplifiedAlbum }> = ({ album }) => {
   return (
@@ -20,7 +16,12 @@ export const AlbumCard: React.FC<{ album: SimplifiedAlbum }> = ({ album }) => {
           {new Date(album.release_date).getFullYear()}
           {` · `}
           {album.artists.map((a, i) => (
-            <Link key={a.id} href={routes.artist(a)} underline="hover" onClick={stopPropagation}>
+            <Link
+              key={a.id}
+              href={routes.artist(a)}
+              underline="hover"
+              onClick={stopEventPropagation}
+            >
               {a.name}
             </Link>
           ))}
