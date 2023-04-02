@@ -27,6 +27,7 @@ const darkTheme = createTheme({
     body1: { fontSize: 14 },
   },
   components: {
+    MuiSkeleton: { defaultProps: { animation: 'wave' } },
     MuiLink: { defaultProps: { underline: 'none', color: 'inherit' } },
     MuiButton: {
       styleOverrides: {

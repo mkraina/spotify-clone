@@ -9,7 +9,7 @@ import { Screen } from '../components';
 
 const UserAvatar = React.memo<{ size: number }>(props => {
   const user = useUserProfile();
-  const imgUri = user.data?.images[0].url;
+  const imgUri = user.data?.images[0]?.url;
   const imgSrc = useMemo(() => ({ uri: imgUri }), [imgUri]);
   return <Avatar.Image size={props.size} source={imgSrc} />;
 });

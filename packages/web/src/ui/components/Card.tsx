@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useHover from 'react-use-hover';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
-import { Avatar, Box, Card as MaterialCard, Fab, Link, Typography } from '@mui/material';
+import { Avatar, Box, Card as MaterialCard, Fab, Link, Skeleton, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 import { routes, stopEventPropagation } from '../../navigation';
@@ -35,25 +35,47 @@ const PlayButtonContainer = styled.div<{ visible: boolean }>(({ theme, visible }
   transition: 'opacity 0.5s, transform 0.5s;',
 }));
 
-export const Card: React.FC<{
+type Props = {
   href: string;
   image: string | undefined;
   title: string;
-  roundAvatar?: boolean;
+  isPlaceholder?: false;
   subTitle?: React.ReactNode;
   trackId?: string;
-}> = props => {
+};
+
+type PlaceholderProps = Partial<Omit<Props, 'isPlaceholder'>> & {
+  isPlaceholder: true;
+};
+
+export const Card: React.FC<
+  (Props | PlaceholderProps) & {
+    roundAvatar?: boolean;
+  }
+> = props => {
   const [isHovering, hoverProps] = useHover();
   const navigate = useNavigate();
+  const openDetail = useCallback(
+    () => (props.isPlaceholder ? undefined : navigate(props.href)),
+    [navigate, props.href, props.isPlaceholder]
+  );
   return (
     <StyledPaper
       {...hoverProps}
       elevation={6}
-      onClick={useCallback(() => navigate(props.href), [navigate, props.href])}
+      onClick={props.isPlaceholder ? undefined : openDetail}
     >
       <Box flex={1} flexDirection="column" padding={1}>
         <AspectRatio margin={1}>
-          <StyledAvatar rounded={!!props.roundAvatar} src={props.image} />
+          {props.isPlaceholder ? (
+            <Skeleton
+              height="100%"
+              variant={props.roundAvatar ? 'circular' : 'rounded'}
+              width="100%"
+            />
+          ) : (
+            <StyledAvatar rounded={!!props.roundAvatar} src={props.image} />
+          )}
           {!!props.trackId && (
             <PlayButtonContainer visible={isHovering}>
               <Fab href={routes.track({ id: props.trackId })} onClick={stopEventPropagation}>
@@ -62,12 +84,18 @@ export const Card: React.FC<{
             </PlayButtonContainer>
           )}
         </AspectRatio>
-        <Label numOfLines={1} variant="h6">
-          <Link href={props.href} underline="none">
-            {props.title}
-          </Link>
-        </Label>
-        <Label numOfLines={2}>{props.subTitle}</Label>
+        <>
+          <Label numOfLines={1} variant="h6">
+            {props.isPlaceholder ? (
+              <Skeleton variant="text" />
+            ) : (
+              <Link href={props.href} underline="none">
+                {props.title}
+              </Link>
+            )}
+          </Label>
+          <Label numOfLines={2}>{props.subTitle}</Label>
+        </>
       </Box>
     </StyledPaper>
   );

@@ -23,3 +23,5 @@ export const SPOTIFY_AUTH_SCOPES = [
   'user-read-email',
   'user-read-private',
 ];
+
+export const PAGE_SIZE = 20;

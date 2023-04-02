@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearch } from '@spotify-clone/shared/api';
+import { SearchResult, useSearch } from '@spotify-clone/shared/api';
 import { spacing } from '@spotify-clone/shared/ui';
-import { SearchContent } from 'spotify-types';
 
 import { AppScreenProps } from '../../navigation';
 import { Appbar, SafeArea, StyleSheet, Text, TextInput, useStyles, useTheme } from '../../ui';
@@ -28,14 +27,14 @@ const themedStyles = StyleSheet.themed(({ colors }) => ({
   result: { height: 54 },
 }));
 
-type SectionData = SearchContent;
+type SectionData = NonNullable<SearchResult>['pages'][0];
 const Section = React.memo<{
   data: SectionData;
   type: keyof SectionData;
 }>(({ type, data }) => {
   const styles = useStyles(themedStyles);
 
-  const items = data[type]?.items;
+  const items = type !== 'nextOffset' && data[type]?.items;
 
   if (!items) {
     return null;
@@ -60,6 +59,8 @@ export const SearchScreen = React.memo<AppScreenProps<'search'>>(
     const styles = useStyles(themedStyles);
     const theme = useTheme();
 
+    const page = search.data?.pages[0];
+
     return (
       <>
         <SafeArea.Top />
@@ -81,9 +82,9 @@ export const SearchScreen = React.memo<AppScreenProps<'search'>>(
           stickyHeaderHiddenOnScroll
           bounces={false}
         >
-          {search.data &&
-            Object.keys(search.data).map(key => (
-              <Section key={key} data={search.data} type={key as keyof SectionData} />
+          {page &&
+            Object.keys(page).map(key => (
+              <Section key={key} data={page} type={key as keyof SectionData} />
             ))}
         </Screen>
       </>
