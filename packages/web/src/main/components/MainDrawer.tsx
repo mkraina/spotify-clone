@@ -13,7 +13,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SvgIcon from '@mui/material/SvgIcon';
 import Toolbar from '@mui/material/Toolbar';
-import { useUserTop } from '@spotify-clone/shared/api';
+import { useCurrentUserPlaylists } from '@spotify-clone/shared/api';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
 import { ScreenName } from '@spotify-clone/shared/navigation';
 import { spacing } from '@spotify-clone/shared/ui';
@@ -78,10 +78,10 @@ const RouteItem: React.FC<{ pathName: ScreenName; route: string }> = props => {
 };
 
 const ArtistsList: React.FC = () => {
-  const topArtists = useUserTop('artists', 'short_term');
+  const playlists = useCurrentUserPlaylists();
   return (
     <>
-      {topArtists.data?.items.map(a => (
+      {playlists.data?.items.map(a => (
         <Item key={a.id} href={routes.artist({ id: a.id })}>
           {a.name}
         </Item>

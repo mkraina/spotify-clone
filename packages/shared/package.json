@@ -8,6 +8,7 @@
     "colord": "^2.9.3",
     "date-fns": "^2.29.3",
     "i18next": "*",
+    "qs": "^6.11.1",
     "react-i18next": "*",
     "react-query": "^3.39.3",
     "react-redux": "^8.0.5",

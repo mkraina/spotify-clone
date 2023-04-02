@@ -1,0 +1,13 @@
+diff --git a/node_modules/spotify-types/typings/player.d.ts b/node_modules/spotify-types/typings/player.d.ts
+index 35f48c0..5bce18a 100644
+--- a/node_modules/spotify-types/typings/player.d.ts
++++ b/node_modules/spotify-types/typings/player.d.ts
+@@ -195,7 +195,7 @@ export interface RecentlyPlayed {
+  */
+ export interface PlayHistory {
+     /** The context the track was played from. */
+-    context: PlayerContext;
++    context: PlayerContext | null;
+     /** The date and time the track was played. */
+     played_at: string;
+     /** The track the user listened to. */
