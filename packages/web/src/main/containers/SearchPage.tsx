@@ -19,8 +19,8 @@ import { AlbumCard } from '../../albums';
 import { ArtistCard } from '../../artists';
 import { CategoryCard } from '../../categories';
 import { routes, withParams } from '../../navigation';
-import { ShowCard } from '../../shows';
-import { EpisodeCard } from '../../shows/components/EpisodeCard';
+import { EpisodeCard, ShowCard } from '../../shows';
+import { TracksList } from '../../tracks';
 import { Card, CardProvider, GridLayout, GridLayoutProps, SearchBar } from '../../ui';
 import { Page } from '../components/Page';
 
@@ -174,6 +174,18 @@ export default withParams<'search'>(({ params }) => {
       {params.query ? (
         <>
           <Filters filters={filters} />
+          {shouldShowSection('tracks', selectedFilter) && (
+            <>
+              {selectedFilter.type !== 'tracks' && (
+                <Typography paddingTop={1} paddingX={3} variant="h5">
+                  {t('tracksTitle')}
+                </Typography>
+              )}
+              <Box flexDirection="column" paddingX={1} paddingY={2}>
+                <TracksList {...search} infiniteScroll={selectedFilter.type === 'tracks'} />
+              </Box>
+            </>
+          )}
           {shouldShowSection('artists', selectedFilter) && (
             <Results {...search} showAll={selectedFilter.type === 'artists'} type="artists" />
           )}
