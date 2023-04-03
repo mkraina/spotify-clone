@@ -14,7 +14,7 @@ export const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => {
       roundAvatar
       subTitle={t('artistCardSubTitle')}
       title={artist.name}
-      trackId={artist.id}
+      trackContext={artist}
     />
   );
 };

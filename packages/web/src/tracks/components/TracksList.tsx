@@ -1,8 +1,7 @@
 import { UseInfiniteQueryResult } from 'react-query';
-import { PlayArrowRounded } from '@mui/icons-material';
+import { PauseRounded, PlayArrowRounded } from '@mui/icons-material';
 import { Box, Link, List, ListItemButton, Skeleton, Typography } from '@mui/material';
 import { SearchResultData } from '@spotify-clone/shared/api';
-import { useAppSelector } from '@spotify-clone/shared/redux';
 import { Color, PropsWithPlaceholder } from '@spotify-clone/shared/ui';
 import format from 'date-fns/format';
 import { Track } from 'spotify-types';
@@ -10,23 +9,24 @@ import styled, { useTheme } from 'styled-components';
 
 import { routes, stopEventPropagation } from '../../navigation';
 import { AspectRatio } from '../../ui';
-import { trackPlayer } from '../utils';
+import { usePlayback } from '../hooks';
 
-const PlayButtonOverlayContainer = styled(PlayArrowRounded)(({ theme }) => ({
+const PlayButtonOverlayContainer = styled(Box)<{ isPlaying: boolean }>(({ theme, isPlaying }) => ({
   width: '100%',
   height: '100%',
   position: 'absolute',
+  justifyContent: 'center',
+  alignItems: 'center',
   padding: theme.spacing(),
   backgroundColor: Color.alpha(theme.palette.common.black, 0.7),
   color: theme.palette.common.white,
-  opacity: 0,
+  opacity: isPlaying ? 1 : 0,
   transition: 'opacity 0.5s',
   ':hover': { opacity: 1 },
 }));
 
-// eslint-disable-next-line max-lines-per-function
 const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
-  const currentPlayingTrackId = useAppSelector(s => s.tracks.player?.track_window.current_track.id);
+  const [isPlaying, togglePlayback] = usePlayback(props);
   return (
     <ListItemButton disableRipple>
       <Box alignItems="center" flexDirection="row" width="100%">
@@ -36,9 +36,9 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
           ) : (
             <>
               <img src={props.album.images[0]?.url ?? props.artists[0]?.images[0]?.url} />
-              <PlayButtonOverlayContainer
-                onClick={() => trackPlayer.play(`spotify:track:${props.id}`)}
-              />
+              <PlayButtonOverlayContainer isPlaying={isPlaying} onClick={togglePlayback}>
+                {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
+              </PlayButtonOverlayContainer>
             </>
           )}
         </AspectRatio>
@@ -46,10 +46,7 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
           {props.isPlaceholder ? (
             <Skeleton />
           ) : (
-            <Typography
-              color={currentPlayingTrackId === props.id ? 'primary' : undefined}
-              variant="h6"
-            >
+            <Typography color={isPlaying ? 'primary' : undefined} variant="h6">
               {props.name}
             </Typography>
           )}

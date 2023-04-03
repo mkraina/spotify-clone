@@ -1,13 +1,16 @@
 import React, { PropsWithChildren, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useHover from 'react-use-hover';
+import { PauseRounded } from '@mui/icons-material';
 import Close from '@mui/icons-material/Close';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import { Avatar, Box, Card as MaterialCard, Fab, Link, Skeleton, Typography } from '@mui/material';
 import { Color } from '@spotify-clone/shared/ui';
 import styled from 'styled-components';
 
-import { routes, stopEventPropagation } from '../../navigation';
+import { stopEventPropagation } from '../../navigation';
+import { usePlayback } from '../../tracks';
+import { TrackPlayerPlayContext } from '../../tracks/utils';
 
 import { AspectRatio } from './AspectRatio';
 
@@ -60,7 +63,7 @@ type Props = {
   title: string;
   isPlaceholder?: false;
   subTitle?: React.ReactNode;
-  trackId?: string;
+  trackContext?: TrackPlayerPlayContext;
 };
 
 type PlaceholderProps = Partial<Omit<Props, 'isPlaceholder'>> & {
@@ -74,6 +77,25 @@ const Context = React.createContext<ContextProps | undefined>(undefined);
 export const CardProvider: React.FC<PropsWithChildren<ContextProps>> = ({ children, ...value }) => (
   <Context.Provider value={value}>{children}</Context.Provider>
 );
+
+const PlayButton: React.FC<{ trackContext: TrackPlayerPlayContext; visible: boolean }> = ({
+  trackContext,
+  visible,
+}) => {
+  const [isPlaying, togglePlayback] = usePlayback(trackContext);
+  return (
+    <PlayButtonContainer visible={visible || isPlaying}>
+      <Fab
+        onClick={e => {
+          stopEventPropagation(e);
+          togglePlayback();
+        }}
+      >
+        {isPlaying ? <PauseRounded fontSize="large" /> : <PlayArrowRounded fontSize="large" />}
+      </Fab>
+    </PlayButtonContainer>
+  );
+};
 
 export const Card: React.FC<
   (Props | PlaceholderProps) & {
@@ -106,12 +128,8 @@ export const Card: React.FC<
           ) : (
             <StyledAvatar $rounded={!!props.roundAvatar} src={props.image} />
           )}
-          {!!props.trackId && (
-            <PlayButtonContainer visible={isHovering}>
-              <Fab href={routes.track({ id: props.trackId })} onClick={stopEventPropagation}>
-                <PlayArrowRounded fontSize="large" />
-              </Fab>
-            </PlayButtonContainer>
+          {props.trackContext && (
+            <PlayButton trackContext={props.trackContext} visible={isHovering} />
           )}
         </AspectRatio>
         <>

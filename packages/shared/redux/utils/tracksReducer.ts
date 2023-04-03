@@ -5,7 +5,7 @@ type Player = {
   bitrate: number;
   context: {
     metadata: Record<string, unknown>;
-    uri: null;
+    uri: null | string;
   };
   disallows: {
     resuming: boolean;
@@ -22,7 +22,7 @@ type Player = {
   shuffle: boolean;
   timestamp: number;
   track_window: {
-    current_track: Pick<SimplifiedTrack, 'id'>;
+    current_track: Pick<SimplifiedTrack, 'id' | 'uri'>;
     //next_tracks: SimplifiedTrack[];
     //previous_tracks: SimplifiedTrack[];
   };

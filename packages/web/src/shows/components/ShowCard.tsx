@@ -10,7 +10,6 @@ export const ShowCard: React.FC<{ show: SimplifiedShow }> = ({ show }) => {
       image={show.images[0]?.url}
       subTitle={show.publisher}
       title={show.name}
-      trackId={show.id}
     />
   );
 };

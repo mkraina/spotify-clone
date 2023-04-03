@@ -1,39 +1,59 @@
-import { dispatch, getState } from '@spotify-clone/shared/redux';
-import { tracksActions } from '@spotify-clone/shared/redux/utils/tracksReducer';
+import { appActions, dispatch, getState } from '@spotify-clone/shared/redux';
+import { SimplifiedAlbum, SimplifiedArtist, SimplifiedTrack } from 'spotify-types';
 import SpotifyPlayer from 'spotify-web-playback';
 
-const createTrackPlayer = (): Pick<SpotifyPlayer, 'play'> => {
-  let connected = false;
-  const player = new SpotifyPlayer('spotify-clone-web');
-  player.addListener('state', state =>
-    dispatch(
-      tracksActions.onPlayerStateChange(
-        state
-          ? {
-              ...state,
-              track_window: { current_track: { id: state.track_window.current_track.id } },
-            }
-          : undefined
-      )
-    )
-  );
+import app from '../../../package.json';
 
-  const connect = async () => {
+export type TrackPlayerPlayContext = SimplifiedAlbum | SimplifiedArtist | SimplifiedTrack;
+
+export interface TrackPlayer {
+  init: () => void;
+  pause: () => void;
+  play: (uri: string) => void;
+  setToken: (token: string) => void;
+}
+
+const createTrackPlayer = (): TrackPlayer => {
+  let connected = false;
+  const player = new SpotifyPlayer(app.name);
+  const connect = async (onConnected?: () => void) => {
     const token = getState().auth.authorization?.accessToken;
-    if (connected || !token) return;
     try {
+      if (connected || !token) return;
       await player.connect(token);
-      connected = true;
+
+      connected = new window.AudioContext().state === 'running';
     } catch (e) {
-      console.log(e);
+      console.log('error connecting', e);
+    } finally {
+      if (connected) onConnected?.();
     }
-    return;
+  };
+  const init = () => {
+    player.addListener('state', state =>
+      dispatch(
+        appActions.onPlayerStateChange(
+          state
+            ? {
+                ...state,
+                track_window: { current_track: state.track_window.current_track },
+              }
+            : undefined
+        )
+      )
+    );
+    void connect();
   };
 
   return {
-    play: async () => {
-      await connect();
-      return player.play();
+    init,
+    setToken: player.setToken,
+    play: (uri: string) => {
+      console.warn(uri);
+      void connect(() => player.play(uri));
+    },
+    pause: () => {
+      void connect(player.pause);
     },
   };
 };

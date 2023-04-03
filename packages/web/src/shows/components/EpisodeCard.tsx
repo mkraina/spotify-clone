@@ -16,7 +16,6 @@ export const EpisodeCard: React.FC<{ episode: SimplifiedEpisode }> = ({ episode 
         duration: getEpisodeDuration(episode),
       })}
       title={episode.name}
-      trackId={episode.id}
     />
   );
 };

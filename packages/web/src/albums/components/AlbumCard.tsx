@@ -27,6 +27,7 @@ export const AlbumCard: React.FC<{ album: SimplifiedAlbum }> = ({ album }) => {
         </>
       }
       title={album.name}
+      trackContext={album}
     />
   );
 };
