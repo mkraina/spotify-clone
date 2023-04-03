@@ -4,12 +4,13 @@ import { Persistor, persistReducer, persistStore, Storage } from 'redux-persist'
 
 import { authActions, authReducer, AuthState } from './authReducer';
 import { searchActions, searchReducer, SearchState } from './searchReducer';
+import { tracksActions, tracksReducer, TracksState } from './tracksReducer';
 
-export const appActions = { ...authActions, ...searchActions };
+export const appActions = { ...authActions, ...searchActions, ...tracksActions };
 
 type AppActions = typeof appActions;
 type AppAction = ReturnType<AppActions[keyof AppActions]>;
-export type AppState = { auth: AuthState; search: SearchState };
+export type AppState = { auth: AuthState; search: SearchState; tracks: TracksState };
 export type AppDispatch = Dispatch<AppAction>;
 
 type Reducers = { [K in keyof AppState]: Reducer<AppState[K]> };
@@ -25,6 +26,7 @@ type ReducersConfig = {
 const reducersConfig: ReducersConfig = {
   auth: { reducer: authReducer, persist: true, encrypt: true },
   search: { reducer: searchReducer, persist: true },
+  tracks: { reducer: tracksReducer, persist: false },
 };
 
 let persistedStore: { persistor: Persistor; store: ToolkitStore } | undefined;
