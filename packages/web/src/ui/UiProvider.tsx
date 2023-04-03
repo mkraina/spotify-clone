@@ -1,6 +1,8 @@
 import React, { PropsWithChildren } from 'react';
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import { ButtonProps, Theme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
+import { LinkProps } from '@mui/material/Link';
 import { createTheme, getOverlayAlpha, ThemeProvider } from '@mui/material/styles';
 import { TypographyStyleOptions } from '@mui/material/styles/createTypography';
 import { Color, palette, spacing } from '@spotify-clone/shared/ui';
@@ -12,6 +14,15 @@ const getHoverColor = (color: ButtonProps['color'] | 'default' = 'primary', them
   const backgroundColor = theme.palette[color].main;
   return theme.palette[color][Color.isDark(backgroundColor) ? 'light' : 'dark'];
 };
+
+const LinkBehavior = React.forwardRef<
+  HTMLAnchorElement,
+  Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
+>((props, ref) => {
+  const { href, ...other } = props;
+  // Map href (MUI) -> to (react-router)
+  return <RouterLink ref={ref} to={href} {...other} />;
+});
 
 const headlineStyle: TypographyStyleOptions = { color: palette.grey[50], fontWeight: 'bold' };
 
@@ -27,8 +38,15 @@ const darkTheme = createTheme({
     body1: { fontSize: 14 },
   },
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
+    },
     MuiSkeleton: { defaultProps: { animation: 'wave' } },
-    MuiLink: { defaultProps: { underline: 'none', color: 'inherit' } },
+    MuiLink: {
+      defaultProps: { underline: 'none', color: 'inherit', component: LinkBehavior } as LinkProps,
+    },
     MuiButton: {
       styleOverrides: {
         root: ({ theme, ownerState: { color = 'primary' } }) => ({
@@ -62,6 +80,35 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: { width: '100%', bottom: 0, height: 100, backgroundColor: 'transparent' },
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ':hover': {
+            '& .MuiSlider-track': { backgroundColor: theme.palette.primary.main },
+            '& .MuiSlider-thumb': {
+              height: theme.spacing(1.5),
+              width: theme.spacing(1.5),
+              backgroundColor: theme.palette.common.white,
+            },
+          },
+        }),
+        thumb: { backgroundColor: 'transparent' },
+        track: ({ theme }) => ({
+          height: theme.spacing(0.5),
+          backgroundColor: theme.palette.common.white,
+        }),
+        rail: ({ theme }) => ({
+          opacity: 0.5,
+          height: theme.spacing(0.5),
+          backgroundColor: theme.palette.common.white,
+        }),
+      },
+    },
     MuiDrawer: {
       styleOverrides: {
         root: {
@@ -69,6 +116,7 @@ const darkTheme = createTheme({
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
+            zIndex: 1,
             boxSizing: 'border-box',
           },
         },

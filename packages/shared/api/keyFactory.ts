@@ -49,3 +49,7 @@ export const searchQueryKey = createQueryKeys('search', all => ({
   search: ({ q, type }: { q: string | undefined; type?: SearchType[] }) =>
     [...all, 'search', { q: q?.trim(), type }] as const,
 }));
+
+export const playerQueryKey = createQueryKeys('player', all => ({
+  devices: [...all, 'devices'] as const,
+}));

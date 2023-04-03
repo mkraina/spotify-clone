@@ -5,6 +5,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import Home from '@mui/icons-material/Home';
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
 import Search from '@mui/icons-material/Search';
+import { BottomNavigation } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -77,7 +78,7 @@ const RouteItem: React.FC<{ pathName: ScreenName; route: string }> = props => {
   );
 };
 
-const ArtistsList: React.FC = () => {
+const UserPlaylists: React.FC = () => {
   const playlists = useCurrentUserPlaylists();
   return (
     <>
@@ -92,7 +93,7 @@ const ArtistsList: React.FC = () => {
 
 export const MainDrawer: React.FC = () => {
   return (
-    <Drawer anchor="left" variant="permanent">
+    <Drawer anchor="left" open variant="persistent">
       <List disablePadding>
         <Toolbar />
         <RouteItem pathName="home" route={routes.home} />
@@ -101,7 +102,8 @@ export const MainDrawer: React.FC = () => {
         <Space size={4} />
         <Divider />
         <Space size={4} />
-        <ArtistsList />
+        <UserPlaylists />
+        <BottomNavigation />
       </List>
     </Drawer>
   );

@@ -82,16 +82,20 @@ const PlayButton: React.FC<{ trackContext: TrackPlayerPlayContext; visible: bool
   trackContext,
   visible,
 }) => {
-  const [isPlaying, togglePlayback] = usePlayback(trackContext);
+  const [playbackStatus, togglePlayback] = usePlayback(trackContext);
   return (
-    <PlayButtonContainer visible={visible || isPlaying}>
+    <PlayButtonContainer visible={visible || playbackStatus !== 'none'}>
       <Fab
         onClick={e => {
           stopEventPropagation(e);
           togglePlayback();
         }}
       >
-        {isPlaying ? <PauseRounded fontSize="large" /> : <PlayArrowRounded fontSize="large" />}
+        {playbackStatus === 'playing' ? (
+          <PauseRounded fontSize="large" />
+        ) : (
+          <PlayArrowRounded fontSize="large" />
+        )}
       </Fab>
     </PlayButtonContainer>
   );
@@ -137,7 +141,7 @@ export const Card: React.FC<
             {props.isPlaceholder ? (
               <Skeleton variant="text" />
             ) : (
-              <Link href={props.href} underline="none">
+              <Link href={props.href} underline="none" onClick={stopEventPropagation}>
                 {props.title}
               </Link>
             )}

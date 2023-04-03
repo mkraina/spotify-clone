@@ -1,15 +1,16 @@
 import { useAppSelector } from '@spotify-clone/shared/redux';
 
-import { trackPlayer } from '../utils';
+import { isPlaying, trackPlayer } from '../utils';
 
+export type PlaybackStatus = 'playing' | 'paused' | 'none';
 export const usePlayback = ({ uri }: { uri?: string }) => {
-  const isPlaying = useAppSelector(
-    s => (s.tracks.player?.context.uri || s.tracks.player?.track_window.current_track.uri) === uri
-  );
+  const isActive = useAppSelector(s => isPlaying(uri, s));
+  const isPaused = useAppSelector(s => !!s.tracks.player?.paused);
+  const status: PlaybackStatus = isActive ? (isPaused ? 'paused' : 'playing') : 'none';
   const toggle = () => {
     if (!uri) return;
-    if (isPlaying) return trackPlayer.pause();
-    void trackPlayer.play(uri);
+    if (status === 'playing') return trackPlayer.pause();
+    void trackPlayer.play(uri, isPaused);
   };
-  return [isPlaying, toggle] as const;
+  return [status, toggle] as const;
 };

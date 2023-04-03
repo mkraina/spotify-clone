@@ -4,6 +4,7 @@ export * from './useArtist';
 export * from './useArtistsAlbums';
 export * from './useArtistsRelatedArtists';
 export * from './useArtistsTopTracks';
+export * from './useAvailableDevices';
 export * from './useBrowseCategories';
 export * from './useCategoryPlaylists';
 export * from './useCurrentUserPlaylists';

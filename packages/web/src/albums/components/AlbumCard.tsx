@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from '@mui/material';
 import { SimplifiedAlbum } from 'spotify-types';
 
@@ -15,14 +16,17 @@ export const AlbumCard: React.FC<{ album: SimplifiedAlbum }> = ({ album }) => {
           {new Date(album.release_date).getFullYear()}
           {` · `}
           {album.artists.map((a, i) => (
-            <Link
-              key={a.id}
-              href={routes.artist(a)}
-              underline="hover"
-              onClick={stopEventPropagation}
-            >
-              {a.name}
-            </Link>
+            <React.Fragment key={a.id}>
+              <Link
+                key={a.id}
+                href={routes.artist(a)}
+                underline="hover"
+                onClick={stopEventPropagation}
+              >
+                {a.name}
+              </Link>
+              {i < album.artists.length - 1 ? ', ' : ''}
+            </React.Fragment>
           ))}
         </>
       }

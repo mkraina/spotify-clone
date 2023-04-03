@@ -1,30 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SimplifiedTrack } from 'spotify-types';
+import { SimplifiedAlbum, SimplifiedArtist, Track } from 'spotify-types';
 
+import { RepeatMode } from '../../trackplayer';
+
+export type PlayerTrack = Pick<Track, 'id' | 'uri' | 'name'> & {
+  album: Pick<SimplifiedAlbum, 'id' | 'name' | 'images'>;
+  artists: Pick<SimplifiedArtist, 'id' | 'name'>[];
+};
 type Player = {
-  bitrate: number;
   context: {
     metadata: Record<string, unknown>;
     uri: null | string;
   };
-  disallows: {
-    resuming: boolean;
-    skipping_prev: boolean;
-  };
   duration: number;
   paused: boolean;
   position: number;
-  repeat_mode: number;
-  restrictions: {
-    disallow_resuming_reasons: [];
-    disallow_skipping_prev_reasons: [];
-  };
+  repeat_mode: RepeatMode;
   shuffle: boolean;
   timestamp: number;
   track_window: {
-    current_track: Pick<SimplifiedTrack, 'id' | 'uri'>;
-    //next_tracks: SimplifiedTrack[];
-    //previous_tracks: SimplifiedTrack[];
+    current_track: PlayerTrack;
+    next_tracks: PlayerTrack[];
+    previous_tracks: PlayerTrack[];
   };
 };
 
@@ -42,6 +39,13 @@ const tracksSlice = createSlice({
       ...state,
       player: action.payload,
     }),
+    updatePlayerPosition: (state, action: PayloadAction<number>) =>
+      state.player
+        ? {
+            ...state,
+            player: { ...state.player, position: action.payload },
+          }
+        : state,
   },
 });
 

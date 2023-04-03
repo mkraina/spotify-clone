@@ -12,6 +12,7 @@ export const routes: Routes = {
   show: ({ id }) => `/show/${id}`,
   episode: ({ id }) => `/episode/${id}`,
   category: ({ id }) => `/category/${id}`,
+  queue: '/queue',
 };
 
 export const paths: Paths = {
@@ -26,4 +27,5 @@ export const paths: Paths = {
   episode: '/episode/:id',
   show: '/show/:id',
   playlist: '/playlist/:id',
+  queue: '/queue',
 };

@@ -7,6 +7,7 @@ export type ScreenParamList = {
   episode: { id: string };
   home: undefined;
   playlist: { id: string };
+  queue: undefined;
   search: { query?: string };
   show: { id: string };
   track: { id: string };

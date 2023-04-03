@@ -11,22 +11,25 @@ import { routes, stopEventPropagation } from '../../navigation';
 import { AspectRatio } from '../../ui';
 import { usePlayback } from '../hooks';
 
-const PlayButtonOverlayContainer = styled(Box)<{ isPlaying: boolean }>(({ theme, isPlaying }) => ({
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: theme.spacing(),
-  backgroundColor: Color.alpha(theme.palette.common.black, 0.7),
-  color: theme.palette.common.white,
-  opacity: isPlaying ? 1 : 0,
-  transition: 'opacity 0.5s',
-  ':hover': { opacity: 1 },
-}));
+const PlayButtonOverlayContainer = styled(Box)<{ $isPlaying: boolean }>(
+  ({ theme, $isPlaying }) => ({
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(),
+    backgroundColor: Color.alpha(theme.palette.common.black, 0.7),
+    color: theme.palette.common.white,
+    opacity: $isPlaying ? 1 : 0,
+    transition: 'opacity 0.5s',
+    ':hover': { opacity: 1 },
+  })
+);
 
+// eslint-disable-next-line max-lines-per-function
 const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
-  const [isPlaying, togglePlayback] = usePlayback(props);
+  const [playbackStatus, togglePlayback] = usePlayback(props);
   return (
     <ListItemButton disableRipple>
       <Box alignItems="center" flexDirection="row" width="100%">
@@ -36,8 +39,11 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
           ) : (
             <>
               <img src={props.album.images[0]?.url ?? props.artists[0]?.images[0]?.url} />
-              <PlayButtonOverlayContainer isPlaying={isPlaying} onClick={togglePlayback}>
-                {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
+              <PlayButtonOverlayContainer
+                $isPlaying={playbackStatus !== 'none'}
+                onClick={togglePlayback}
+              >
+                {playbackStatus === 'playing' ? <PauseRounded /> : <PlayArrowRounded />}
               </PlayButtonOverlayContainer>
             </>
           )}
@@ -46,7 +52,7 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
           {props.isPlaceholder ? (
             <Skeleton />
           ) : (
-            <Typography color={isPlaying ? 'primary' : undefined} variant="h6">
+            <Typography color={playbackStatus === 'none' ? undefined : 'primary'} variant="h6">
               {props.name}
             </Typography>
           )}

@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+import { Link } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
@@ -25,7 +26,7 @@ const UserThumbnail: React.FC = () => {
       <StyledChip
         avatar={<Avatar alt={user.data.display_name || undefined} src={user.data.images[0]?.url} />}
         clickable
-        component="a"
+        component={Link}
         href={routes.account}
         label={user.data.display_name}
         variant="filled"

@@ -18,5 +18,6 @@ export const Router: React.FC = () => (
     <Route Component={TrackPage} path={paths.track} />
     <Route Component={CollecionsPage} path={paths.collection} />
     <Route element={<Navigate replace to={routes.home} />} path="*" />
+    <Route Component={null} path={paths.queue} />
   </Routes>
 );
