@@ -11,18 +11,18 @@ import { routes, stopEventPropagation } from '../../navigation';
 
 import { AspectRatio } from './AspectRatio';
 
-const StyledAvatar = styled(Avatar)<{ rounded: boolean }>(({ theme, rounded }) => ({
+const StyledAvatar = styled(Avatar)<{ $rounded: boolean }>(({ theme, $rounded }) => ({
   boxShadow: theme.shadows[8],
-  borderRadius: rounded ? undefined : theme.shape.borderRadius,
+  borderRadius: $rounded ? undefined : theme.shape.borderRadius,
 }));
 
 const StyledPaper = styled(MaterialCard)({ flex: 1, cursor: 'pointer' }) as typeof MaterialCard;
 
-const Label = styled(Typography)<{ numOfLines?: number }>(({ numOfLines, theme }) => ({
+const Label = styled(Typography)<{ $numOfLines?: number }>(({ $numOfLines, theme }) => ({
   display: '-webkit-box',
   overflow: 'hidden',
   WebkitBoxOrient: 'vertical',
-  WebkitLineClamp: numOfLines,
+  WebkitLineClamp: $numOfLines,
   margin: theme.spacing(),
 }));
 
@@ -101,7 +101,7 @@ export const Card: React.FC<
               width="100%"
             />
           ) : (
-            <StyledAvatar rounded={!!props.roundAvatar} src={props.image} />
+            <StyledAvatar $rounded={!!props.roundAvatar} src={props.image} />
           )}
           {!!props.trackId && (
             <PlayButtonContainer visible={isHovering}>
@@ -112,7 +112,7 @@ export const Card: React.FC<
           )}
         </AspectRatio>
         <>
-          <Label numOfLines={1} variant="h6">
+          <Label $numOfLines={1} variant="h6">
             {props.isPlaceholder ? (
               <Skeleton variant="text" />
             ) : (
@@ -121,7 +121,7 @@ export const Card: React.FC<
               </Link>
             )}
           </Label>
-          <Label numOfLines={2}>{props.subTitle}</Label>
+          <Label $numOfLines={2}>{props.subTitle}</Label>
         </>
         {onClose && (
           <CloseIcon
