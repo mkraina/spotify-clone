@@ -46,7 +46,7 @@ const Layout = <T,>({
       ))}
       {(isLoading || isFetchingNextPage) &&
         renderLoadingItem &&
-        new Array(columns - ((data?.length || 0) % columns)).fill(1).map(i => (
+        new Array(columns - ((data?.length || 0) % columns)).fill(1).map((_, i) => (
           <Grid key={i} item xs={1}>
             {renderLoadingItem()}
           </Grid>
