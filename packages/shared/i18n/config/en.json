@@ -19,6 +19,7 @@
   "artistsTitle": "Artists",
   "showsTitle": "Podcasts",
   "tracksTitle": "Songs",
+  "browseAllTitle": "Browse all",
   "episodeCardSubTitle": "{{releaseDate}} · {{duration}} Min",
   "artistCardSubtitle": "Artist"
 }

@@ -11,9 +11,11 @@ export const routes: Routes = {
   playlist: ({ id }) => `/playlist/${id}`,
   show: ({ id }) => `/show/${id}`,
   episode: ({ id }) => `/episode/${id}`,
+  category: ({ id }) => `/category/${id}`,
 };
 
 export const paths: Paths = {
+  category: '/category/:id',
   account: '/account',
   artist: '/artist/:id',
   home: '/',

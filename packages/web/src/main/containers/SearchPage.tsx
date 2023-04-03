@@ -1,18 +1,20 @@
+/* eslint-disable max-lines-per-function */
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Chip, styled, Typography } from '@mui/material';
-import { SearchResult, useSearch } from '@spotify-clone/shared/api';
+import { SearchResult, useBrowseCategories, useSearch } from '@spotify-clone/shared/api';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
 import { Filter, SelectedFilter, useSearchFilters } from '@spotify-clone/shared/search';
-import { SearchContent } from 'spotify-types';
+import { Category, SearchContent } from 'spotify-types';
 
 import { AlbumCard } from '../../albums';
 import { ArtistCard } from '../../artists';
+import { CategoryCard } from '../../categories';
 import { routes, withParams } from '../../navigation';
 import { ShowCard } from '../../shows';
 import { EpisodeCard } from '../../shows/components/EpisodeCard';
-import { Card, GridLayout, SearchBar } from '../../ui';
+import { Card, GridLayout, GridLayoutProps, SearchBar } from '../../ui';
 import { Page } from '../components/Page';
 
 const StyledChip = styled(Chip)<{ selected: boolean }>(({ selected, theme }) => ({
@@ -48,8 +50,17 @@ const ResultItem: React.FC<{
 };
 
 const renderItem = (item: SearchResultItem) => <ResultItem item={item} />;
-const keyExtractor = (item: SearchResultItem) => item.id;
-const Section: React.FC<{
+const renderCategory = (category: Category) => <CategoryCard category={category} />;
+const keyExtractor = (item: SearchResultItem | Category) => item.id;
+
+const Section = <T,>(props: { title: string | undefined } & GridLayoutProps<T>) => (
+  <Box flexDirection="column" padding={3} paddingTop={0}>
+    {!!props.title && <Typography variant="h5">{props.title}</Typography>}
+    <GridLayout {...props} paddingY={1.5} spacing={2} />
+  </Box>
+);
+
+const Results: React.FC<{
   data: SearchResult;
   fetchNextPage: () => void;
   isFetchingNextPage: boolean;
@@ -75,22 +86,18 @@ const Section: React.FC<{
   if (!items?.length && !isLoading) return null;
 
   return (
-    <Box flexDirection="column" padding={3} paddingTop={0}>
-      {!showAll && <Typography variant="h5">{t(sectionTitleKeys[type])}</Typography>}
-      <GridLayout
-        data={items}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        isLoading={isLoading}
-        keyExtractor={keyExtractor}
-        maxRows={showAll ? undefined : 1}
-        paddingY={1.5}
-        renderItem={renderItem}
-        renderLoadingItem={renderLoadingItem}
-        spacing={2}
-      />
-    </Box>
+    <Section
+      data={items}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      isLoading={isLoading}
+      keyExtractor={keyExtractor}
+      maxRows={showAll ? undefined : 1}
+      renderItem={renderItem}
+      renderLoadingItem={renderLoadingItem}
+      title={showAll ? undefined : t(sectionTitleKeys[type])}
+    />
   );
 };
 
@@ -108,7 +115,9 @@ export default withParams<'search'>(({ params }) => {
   const { filters, selectedFilter } = useSearchFilters();
   const search = useSearch({ q: params.query, type: selectedFilter.value });
   const navigate = useNavigate();
+  const categories = useBrowseCategories();
   const { t } = useTranslation();
+
   return (
     <Page
       toolbarComponent={
@@ -122,18 +131,31 @@ export default withParams<'search'>(({ params }) => {
         />
       }
     >
-      <Filters filters={filters} />
-      {shouldShowSection('artists', selectedFilter) && (
-        <Section {...search} showAll={selectedFilter.type === 'artists'} type="artists" />
-      )}
-      {shouldShowSection('albums', selectedFilter) && (
-        <Section {...search} showAll={selectedFilter.type === 'albums'} type="albums" />
-      )}
-      {shouldShowSection('podcastsAndEpisodes', selectedFilter) && (
+      {params.query ? (
         <>
-          <Section {...search} type="shows" />
-          <Section {...search} type="episodes" />
+          <Filters filters={filters} />
+          {shouldShowSection('artists', selectedFilter) && (
+            <Results {...search} showAll={selectedFilter.type === 'artists'} type="artists" />
+          )}
+          {shouldShowSection('albums', selectedFilter) && (
+            <Results {...search} showAll={selectedFilter.type === 'albums'} type="albums" />
+          )}
+          {shouldShowSection('podcastsAndEpisodes', selectedFilter) && (
+            <>
+              <Results {...search} type="shows" />
+              <Results {...search} type="episodes" />
+            </>
+          )}
         </>
+      ) : (
+        <Section
+          data={categories.data?.categories.items}
+          keyExtractor={keyExtractor}
+          paddingY={1.5}
+          renderItem={renderCategory}
+          spacing={2}
+          title={t('browseAllTitle')}
+        />
       )}
     </Page>
   );

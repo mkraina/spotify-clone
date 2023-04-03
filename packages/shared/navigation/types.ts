@@ -2,6 +2,7 @@ export type ScreenParamList = {
   account: undefined;
   album: { id: string };
   artist: { id: string };
+  category: { id: string };
   collection: { type?: 'playlists' | 'podcasts' | 'artists' | 'albums' };
   episode: { id: string };
   home: undefined;

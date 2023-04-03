@@ -3,7 +3,7 @@ import { Grid, GridProps, useMediaQuery } from '@mui/material';
 
 import { useScrollEndReached } from '../hooks';
 
-type Props<T> = {
+export type GridLayoutProps<T> = {
   data: T[] | undefined;
   keyExtractor: (item: T, index: number) => string | number;
   renderItem: (item: T, index: number) => React.ReactNode;
@@ -28,7 +28,7 @@ const Layout = <T,>({
   renderLoadingItem,
   isFetchingNextPage,
   ...gridProps
-}: Props<T>): React.ReactElement | null => {
+}: GridLayoutProps<T>): React.ReactElement | null => {
   const xs = useMediaQuery(theme => theme.breakpoints.down('xs'));
   const sm = useMediaQuery(theme => theme.breakpoints.down('sm'));
   const md = useMediaQuery(theme => theme.breakpoints.down('md'));
