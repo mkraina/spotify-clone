@@ -1,10 +1,17 @@
 /* eslint-disable max-lines-per-function */
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Chip, styled, Typography } from '@mui/material';
-import { SearchResult, useBrowseCategories, useSearch } from '@spotify-clone/shared/api';
+import {
+  SearchResult,
+  SearchResultItem,
+  useBrowseCategories,
+  useSearch,
+} from '@spotify-clone/shared/api';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
+import { useAppDispatch, useAppSelector } from '@spotify-clone/shared/redux';
+import { searchActions } from '@spotify-clone/shared/redux/utils/searchReducer';
 import { Filter, SelectedFilter, useSearchFilters } from '@spotify-clone/shared/search';
 import { Category, SearchContent } from 'spotify-types';
 
@@ -14,7 +21,7 @@ import { CategoryCard } from '../../categories';
 import { routes, withParams } from '../../navigation';
 import { ShowCard } from '../../shows';
 import { EpisodeCard } from '../../shows/components/EpisodeCard';
-import { Card, GridLayout, GridLayoutProps, SearchBar } from '../../ui';
+import { Card, CardProvider, GridLayout, GridLayoutProps, SearchBar } from '../../ui';
 import { Page } from '../components/Page';
 
 const StyledChip = styled(Chip)<{ selected: boolean }>(({ selected, theme }) => ({
@@ -31,25 +38,36 @@ const sectionTitleKeys: Record<keyof SearchContent, TranslationKey> = {
   tracks: 'tracksTitle',
 };
 
-type SearchResultItem = NonNullable<SearchContent[keyof SearchContent]>['items'][0];
 const ResultItem: React.FC<{
   item: SearchResultItem;
-}> = ({ item }) => {
-  switch (item.type) {
-    case 'artist':
-      return <ArtistCard artist={item} />;
-    case 'album':
-      return <AlbumCard album={item} />;
-    case 'episode':
-      return <EpisodeCard episode={item} />;
-    case 'show':
-      return <ShowCard show={item} />;
-    default:
-      return null;
-  }
+  isRecent?: boolean;
+}> = ({ item, isRecent }) => {
+  const dispatch = useAppDispatch();
+  return (
+    <CardProvider
+      onClose={isRecent ? () => dispatch(searchActions.removeRecentSearch(item)) : undefined}
+      onOpen={() => !isRecent && dispatch(searchActions.addRecentSearch(item))}
+    >
+      {(() => {
+        switch (item.type) {
+          case 'artist':
+            return <ArtistCard artist={item} />;
+          case 'album':
+            return <AlbumCard album={item} />;
+          case 'episode':
+            return <EpisodeCard episode={item} />;
+          case 'show':
+            return <ShowCard show={item} />;
+          default:
+            return null;
+        }
+      })()}
+    </CardProvider>
+  );
 };
 
 const renderItem = (item: SearchResultItem) => <ResultItem item={item} />;
+const renderRecentItem = (item: SearchResultItem) => <ResultItem isRecent item={item} />;
 const renderCategory = (category: Category) => <CategoryCard category={category} />;
 const keyExtractor = (item: SearchResultItem | Category) => item.id;
 
@@ -111,11 +129,36 @@ const Filters: React.FC<{ filters: Filter[] }> = ({ filters }) => (
 const shouldShowSection = (type: SelectedFilter['type'], selectedFilter: SelectedFilter) =>
   selectedFilter.type === 'all' || selectedFilter.type === type;
 
+const EmptySearch: React.FC = () => {
+  const categories = useBrowseCategories();
+  const { t } = useTranslation();
+  const recentSearches = useAppSelector(s => s.search.recentSearches);
+
+  return (
+    <>
+      {!!recentSearches.length && (
+        <Section
+          data={recentSearches}
+          keyExtractor={keyExtractor}
+          maxRows={1}
+          renderItem={renderRecentItem}
+          title={t('recentSearchesTitle')}
+        />
+      )}
+      <Section
+        data={categories.data?.categories.items}
+        keyExtractor={keyExtractor}
+        renderItem={renderCategory}
+        title={t('browseAllTitle')}
+      />
+    </>
+  );
+};
+
 export default withParams<'search'>(({ params }) => {
   const { filters, selectedFilter } = useSearchFilters();
   const search = useSearch({ q: params.query, type: selectedFilter.value });
   const navigate = useNavigate();
-  const categories = useBrowseCategories();
   const { t } = useTranslation();
 
   return (
@@ -124,10 +167,7 @@ export default withParams<'search'>(({ params }) => {
         <SearchBar
           placeholder={t('searchInputPlaceholder')}
           value={params.query || ''}
-          onChange={useCallback(
-            (query: string) => navigate(routes.search({ query }), { replace: true }),
-            [navigate]
-          )}
+          onChange={query => navigate(routes.search({ query }), { replace: true })}
         />
       }
     >
@@ -148,14 +188,7 @@ export default withParams<'search'>(({ params }) => {
           )}
         </>
       ) : (
-        <Section
-          data={categories.data?.categories.items}
-          keyExtractor={keyExtractor}
-          paddingY={1.5}
-          renderItem={renderCategory}
-          spacing={2}
-          title={t('browseAllTitle')}
-        />
+        <EmptySearch />
       )}
     </Page>
   );

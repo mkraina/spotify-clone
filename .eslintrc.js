@@ -4,7 +4,6 @@ module.exports = {
   root: true,
   plugins: [
     'react',
-    'react-perf',
     'react-hooks',
     '@typescript-eslint',
     '@shopify',
@@ -54,7 +53,6 @@ module.exports = {
     },
   },
   extends: [
-    'plugin:react-perf/recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:typescript-enum/recommended',

@@ -1,6 +1,5 @@
-import { MouseEventHandler } from 'react';
+import { BaseSyntheticEvent } from 'react';
 
 export * from './withParams';
 
-export const stopEventPropagation: MouseEventHandler<HTMLAnchorElement> &
-  MouseEventHandler<HTMLSpanElement> = e => e.stopPropagation();
+export const stopEventPropagation = (e: BaseSyntheticEvent) => e.stopPropagation();

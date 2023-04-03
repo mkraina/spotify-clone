@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import Close from '@mui/icons-material/Close';
 import Search from '@mui/icons-material/Search';
 import Input from '@mui/material/Input';
@@ -29,7 +28,6 @@ export const SearchBar: React.FC<{
   placeholder: string;
   value: string;
 }> = ({ onChange, placeholder, value }) => {
-  const clearInput = useCallback(() => onChange(''), [onChange]);
   return (
     <Container>
       <Search />
@@ -37,14 +35,9 @@ export const SearchBar: React.FC<{
         disableUnderline
         placeholder={placeholder}
         value={value}
-        onChange={useCallback<React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>>(
-          e => {
-            onChange(e.target.value);
-          },
-          [onChange]
-        )}
+        onChange={e => onChange(e.target.value)}
       />
-      {!!value && <Close onClick={clearInput} />}
+      {!!value && <Close onClick={() => onChange('')} />}
     </Container>
   );
 };

@@ -1,6 +1,11 @@
 module.exports = {
-  extends: ['../../.eslintrc.js', '@react-native-community', '@react-native-community'],
-  plugins: ['react-memo'],
+  extends: [
+    '../../.eslintrc.js',
+    '@react-native-community',
+    '@react-native-community',
+    'plugin:react-perf/recommended',
+  ],
+  plugins: ['react-perf', 'react-memo'],
   overrides: [
     {
       files: ['*.tsx'],

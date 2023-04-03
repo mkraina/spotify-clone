@@ -3,13 +3,14 @@ import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 import { Persistor, persistReducer, persistStore, Storage } from 'redux-persist';
 
 import { authActions, authReducer, AuthState } from './authReducer';
+import { searchActions, searchReducer, SearchState } from './searchReducer';
+
+export const appActions = { ...authActions, ...searchActions };
 
 type AppActions = typeof appActions;
 type AppAction = ReturnType<AppActions[keyof AppActions]>;
-export type AppState = { auth: AuthState };
+export type AppState = { auth: AuthState; search: SearchState };
 export type AppDispatch = Dispatch<AppAction>;
-
-export const appActions = { ...authActions };
 
 type Reducers = { [K in keyof AppState]: Reducer<AppState[K]> };
 type ReducersConfig = {
@@ -23,6 +24,7 @@ type ReducersConfig = {
 
 const reducersConfig: ReducersConfig = {
   auth: { reducer: authReducer, persist: true, encrypt: true },
+  search: { reducer: searchReducer, persist: true },
 };
 
 let persistedStore: { persistor: Persistor; store: ToolkitStore } | undefined;
@@ -37,9 +39,9 @@ export const prepareStore = (
       return {
         ...acc,
         [key]: persist
-          ? persistReducer(
+          ? persistReducer<unknown>(
               { key, storage: encrypt ? encryptedStorage : storage, blacklist },
-              reducer
+              reducer as Reducer<unknown>
             )
           : reducer,
       };

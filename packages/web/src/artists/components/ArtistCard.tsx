@@ -6,6 +6,7 @@ import { Card } from '../../ui';
 
 export const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => {
   const { t } = useTranslation();
+
   return (
     <Card
       href={routes.artist(artist)}

@@ -13,6 +13,9 @@ const searchTypeToResultFieldMap: Record<SearchType, keyof SearchContent> = {
   show: 'shows',
   episode: 'episodes',
 };
+
+export type SearchResultItem = NonNullable<SearchContent[keyof SearchContent]>['items'][0];
+
 export const useSearch = (props: Parameters<(typeof searchQueryKey)['search']>[0]) =>
   useInfiniteQuery(
     searchQueryKey.search(props),
