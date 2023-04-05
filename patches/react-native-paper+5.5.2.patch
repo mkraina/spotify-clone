@@ -1,0 +1,44 @@
+diff --git a/node_modules/react-native-paper/lib/typescript/src/components/Icon.d.ts b/node_modules/react-native-paper/lib/typescript/src/components/Icon.d.ts
+index af5f213..5493cb8 100644
+--- a/node_modules/react-native-paper/lib/typescript/src/components/Icon.d.ts
++++ b/node_modules/react-native-paper/lib/typescript/src/components/Icon.d.ts
+@@ -1,7 +1,7 @@
+ import * as React from 'react';
+ import { ImageSourcePropType } from 'react-native';
+ import type { ThemeProp } from '../types';
+-declare type IconSourceBase = string | ImageSourcePropType;
++declare type IconSourceBase = keyof ReactNativePaper.IconSourceMap | ImageSourcePropType;
+ export declare type IconSource = IconSourceBase | Readonly<{
+     source: IconSourceBase;
+     direction: 'rtl' | 'ltr' | 'auto';
+diff --git a/node_modules/react-native-paper/src/components/Icon.tsx b/node_modules/react-native-paper/src/components/Icon.tsx
+index 4d0a600..f480453 100644
+--- a/node_modules/react-native-paper/src/components/Icon.tsx
++++ b/node_modules/react-native-paper/src/components/Icon.tsx
+@@ -11,7 +11,7 @@ import { useInternalTheme } from '../core/theming';
+ import type { ThemeProp } from '../types';
+ import { accessibilityProps } from './MaterialCommunityIcon';
+ 
+-type IconSourceBase = string | ImageSourcePropType;
++type IconSourceBase = keyof ReactNativePaper.IconSourceMap | ImageSourcePropType;
+ 
+ export type IconSource =
+   | IconSourceBase
+diff --git a/node_modules/react-native-paper/src/types.tsx b/node_modules/react-native-paper/src/types.tsx
+index 175131c..4d22dd9 100644
+--- a/node_modules/react-native-paper/src/types.tsx
++++ b/node_modules/react-native-paper/src/types.tsx
+@@ -2,6 +2,13 @@ import type * as React from 'react';
+ 
+ import type { $DeepPartial } from '@callstack/react-theme-provider';
+ 
++declare global {
++  namespace ReactNativePaper {
++      interface IconSourceMap extends Record<string, any> {
++      }
++  }
++}
++
+ export type Font = {
+   fontFamily: string;
+   fontWeight?:

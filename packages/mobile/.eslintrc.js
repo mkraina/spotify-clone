@@ -15,5 +15,28 @@ module.exports = {
     'react-perf/jsx-no-new-function-as-prop': 'error',
     'react-perf/jsx-no-new-object-as-prop': 'error',
     'react-perf/jsx-no-new-array-as-prop': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          { name: 'react-native-paper', message: 'Please import from UI module instead.' },
+          {
+            name: 'react-native',
+            importNames: ['Text'],
+            message: 'Please use Text from UI module instead.',
+          },
+        ],
+        patterns: [
+          {
+            group: [
+              '@react-navigation/native',
+              '@react-navigation/native/lib/typescript/src/theming/useTheme',
+            ],
+            importNames: ['useTheme', 'default'],
+            message: 'Please use Text from UI module instead.',
+          },
+        ],
+      },
+    ],
   },
 };

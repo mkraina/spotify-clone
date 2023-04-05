@@ -1,19 +1,19 @@
 /* eslint-disable react/jsx-no-literals */
 import React from 'react';
-import { Button } from 'react-native-paper';
 
 import { authService } from '../../auth';
 import { AppScreenProps } from '../../navigation';
-import { SafeArea } from '../../ui';
+import { Appbar, Button, SafeArea } from '../../ui';
 import { Screen } from '../components';
-import { Header } from '../components/Header';
 
 export const AccountScreen = React.memo<AppScreenProps<'account'>>(() => {
   return (
     <Screen>
       <SafeArea.Top />
-      <Header />
-      <Button mode="contained" onPress={authService.logout}>
+      <Appbar>
+        <Appbar.BackAction />
+      </Appbar>
+      <Button onPress={authService.logout} icon="dry-cleaning">
         log out
       </Button>
       <Button onPress={authService.logout}>logout</Button>

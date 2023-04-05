@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, StatusBar as RNStatusBar } from 'react-native';
-import { useTheme } from 'react-native-paper';
+
+import { useTheme } from '../hooks';
 
 const isIPhone = Platform.OS === 'ios';
 const osVersion = isIPhone ? parseFloat(Platform.Version as string) : (Platform.Version as number);

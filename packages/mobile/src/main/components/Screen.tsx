@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, FlatListProps, ScrollView, ScrollViewProps, Text, View } from 'react-native';
+import { FlatList, FlatListProps, ScrollView, ScrollViewProps, View } from 'react-native';
 
-import { BottomTabBarPlaceholder, StatusBar, StyleSheet } from '../../ui';
+import { BottomTabBarPlaceholder, StatusBar, StyleSheet, Text } from '../../ui';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

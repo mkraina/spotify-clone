@@ -2,12 +2,11 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TextStyle, ViewStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Text, useTheme } from 'react-native-paper';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
 import { Color } from '@spotify-clone/shared/ui';
 
 import { MainTabParamList } from '../../navigation';
-import { Icon, IconName, StyleSheet } from '../../ui';
+import { Icon, IconName, StyleSheet, Text, useTheme } from '../../ui';
 
 const styles = StyleSheet.create({
   background: {

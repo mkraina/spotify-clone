@@ -6,7 +6,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 
 import { MainTabParamList } from '../../navigation';
-import { Touchable } from '../../ui';
+import { TouchableRipple } from '../../ui';
 import { TabBarBackground, TabBarIcon, TabBarLabel } from '../components/TabBarComponents';
 
 import { CollectionsStack } from './CollectionsStack';
@@ -26,7 +26,7 @@ const options = ({
     backgroundColor: 'transparent',
     borderTopWidth: 0,
   },
-  tabBarButton: props => <Touchable {...props} />,
+  tabBarButton: props => <TouchableRipple {...props} />,
   tabBarIcon: props => <TabBarIcon {...props} route={route.name} />,
   tabBarLabel: props => <TabBarLabel {...props} route={route.name} />,
   tabBarBackground: () => <TabBarBackground />,

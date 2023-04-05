@@ -4,7 +4,7 @@ import { withSharedProvider } from '@spotify-clone/shared';
 
 import { authService } from '../auth';
 import { getLocale } from '../i18n';
-import { NavigationProvider } from '../navigation';
+import { NavigationProvider } from '../navigation/NavigationProvider';
 import { encryptedStorage, storage } from '../storage';
 import { StyleSheet } from '../ui';
 import { UiProvider } from '../ui/Provider';

@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Text } from 'react-native-paper';
 import { spacing } from '@spotify-clone/shared/ui';
 
 import { authService } from '../../auth';
-import { SafeArea, StyleSheet } from '../../ui';
+import { Button, Card, SafeArea, StyleSheet, Text } from '../../ui';
 import { Screen } from '../components';
 
 const styles = StyleSheet.create({
