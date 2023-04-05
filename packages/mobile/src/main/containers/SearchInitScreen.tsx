@@ -4,13 +4,12 @@ import { View } from 'react-native';
 import { spacing } from '@spotify-clone/shared/ui';
 
 import { AppScreenProps } from '../../navigation';
-import { SafeArea, StyleSheet, Touchable, useStyles } from '../../ui';
+import { Appbar, SafeArea, StyleSheet, TouchableRipple, useStyles } from '../../ui';
 import { Screen } from '../components';
-import { Header } from '../components/Header';
 
 const themedStyles = StyleSheet.themed(theme => ({
-  searchBarContainer: { backgroundColor: theme.colors.background, padding: spacing(2) },
-  searchBar: { backgroundColor: theme.colors.onBackground, height: 48 },
+  searchBarContainer: { backgroundColor: theme.colors.background, padding: spacing(1.5) },
+  searchBar: { backgroundColor: theme.colors.onBackground, height: spacing(6) },
 }));
 
 const stickyHeaderIndices = [1];
@@ -23,14 +22,16 @@ export const SearchInitScreen = React.memo<AppScreenProps<'searchInit'>>(
       <>
         <SafeArea.Top />
         <Screen stickyHeaderIndices={stickyHeaderIndices}>
-          <Header title={t('searchPageTitle')} />
+          <Appbar mode="medium">
+            <Appbar.Content title={t('searchPageTitle')} />
+          </Appbar>
           <View style={styles.searchBarContainer}>
-            <Touchable
+            <TouchableRipple
               color="background"
               onPress={useCallback(() => navigate('search', {}), [navigate])}
             >
               <View style={styles.searchBar} />
-            </Touchable>
+            </TouchableRipple>
           </View>
         </Screen>
       </>

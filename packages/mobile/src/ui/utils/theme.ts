@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { MD3DarkTheme } from 'react-native-paper';
 import { InternalTheme } from 'react-native-paper/lib/typescript/src/types';
 import { Theme as NavigationTheme } from '@react-navigation/native';
