@@ -12,7 +12,7 @@ type SharedStackParamList<
     ? ParamList<Initial>
     : ParamList<Initial> | Record<Initial, undefined>
   : Record<Initial, undefined>) &
-  ParamList<'artist' | 'album' | Extra>;
+  ParamList<'artist' | 'album' | 'category' | Extra>;
 
 export type HomeStackParamList = SharedStackParamList<'home'>;
 export type SearchStackParamList = SharedStackParamList<'searchInit', 'search'>;

@@ -1,6 +1,3 @@
-/* eslint-disable react-memo/require-usememo */
-/* eslint-disable react-perf/jsx-no-new-object-as-prop */
-/* eslint-disable react-memo/require-memo */
 import React, { ComponentProps, useMemo } from 'react';
 import { TouchableNativeFeedback } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -25,6 +22,12 @@ const themedStyles = StyleSheet.themed(theme => ({
     backgroundColor: theme.colors.background,
   },
   appBarContentTitle: { fontWeight: 'bold', padding: spacing() },
+  chip: { borderRadius: 360 },
+  chipSelected: {
+    borderRadius: 360,
+    backgroundColor: theme.colors.primaryContainer,
+    borderColor: theme.colors.primary,
+  },
 }));
 
 type GetPropsCallback<T, R extends Partial<T>> = (
@@ -100,32 +103,48 @@ export const TouchableRipple = React.memo<
 export const Text = Paper.Text;
 export const TextInput = Paper.TextInput;
 export const Card = Paper.Card;
-
+export const Chip = assignDefaultProps(
+  Paper.Chip,
+  ({ mode = 'outlined' }) => ({ mode }),
+  (props, { styles }) => ({
+    ...props,
+    style: [props.selected ? styles.chipSelected : styles.chip, props.style],
+    selected: undefined,
+  })
+);
 const AvatarText = assignDefaultProps(Paper.Avatar.Text, (_, { theme }) => ({
   theme: { colors: { primary: theme.colors.elevation.level4 } },
 }));
 const AvatarIcon = assignDefaultProps(Paper.Avatar.Icon, (_, { theme }) => ({
   theme: { colors: { primary: theme.colors.elevation.level4 } },
 }));
-const AvatarImage = assignDefaultProps(Paper.Avatar.Image, undefined, ({ source }, { theme }) => {
-  return {
-    theme: { colors: { primary: theme.colors.elevation.level4 } },
-    source:
-      typeof source === 'function' || Array.isArray(source) || typeof source === 'number'
-        ? source
-        : ({ size }) => {
-            if (!source?.uri) {
-              return <AvatarIcon icon="account" size={size} />;
-            }
-            return (
-              <FastImage
-                source={{ uri: source.uri }}
-                style={{ width: size, height: size, borderRadius: size / 2 }}
-              />
-            );
-          },
-  };
-});
+const AvatarImage = assignDefaultProps(
+  Paper.Avatar.Image,
+  undefined,
+  ({ source, style }, { theme }) => {
+    return {
+      theme: { colors: { primary: theme.colors.elevation.level4 } },
+      source:
+        typeof source === 'function' || Array.isArray(source) || typeof source === 'number'
+          ? source
+          : ({ size }) => {
+              if (!source?.uri) {
+                return <AvatarIcon icon="account" size={size} />;
+              }
+              return (
+                <FastImage
+                  source={{ uri: source.uri }}
+                  style={{
+                    width: size,
+                    height: size,
+                    borderRadius: StyleSheet.flatten(style).borderRadius ?? size / 2,
+                  }}
+                />
+              );
+            },
+    };
+  }
+);
 export const Avatar = {
   Text: AvatarText,
   Icon: AvatarIcon,

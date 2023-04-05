@@ -7,4 +7,5 @@ export const Color = {
     colord(color).alpha(Number(alpha)).toRgbString(),
   isDark: (color: string) => colord(color).isDark(),
   isLight: (color: string) => colord(color).isLight(),
+  random: () => `rgb(${[255, 255, 255].map(h => h * Math.random()).join(',')})`,
 };

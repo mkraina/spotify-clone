@@ -26,6 +26,7 @@ const options = ({
     backgroundColor: 'transparent',
     borderTopWidth: 0,
   },
+  tabBarLabelPosition: 'below-icon',
   tabBarButton: props => <TouchableRipple {...props} />,
   tabBarIcon: props => <TabBarIcon {...props} route={route.name} />,
   tabBarLabel: props => <TabBarLabel {...props} route={route.name} />,

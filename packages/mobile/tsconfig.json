@@ -9,6 +9,7 @@
   },
   "include": [
     "src",
-    "../shared/types"
+    "../shared/types",
+    "types"
   ]
 }
