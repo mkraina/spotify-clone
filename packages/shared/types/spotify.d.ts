@@ -1,4 +1,4 @@
-import 'spotify-types';
+import { SearchContent } from 'spotify-types';
 
 declare module 'spotify-types' {
   /**
@@ -14,4 +14,5 @@ declare module 'spotify-types' {
    * @default medium_term
    */
   type TopItemsTimeRange = 'long_term' | 'medium_term' | 'short_term';
+  type SearchResultItem = NonNullable<SearchContent[keyof SearchContent]>['items'][0];
 }

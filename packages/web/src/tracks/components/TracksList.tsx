@@ -64,7 +64,7 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
 
 const numToDisplay = 4;
 export const TracksList: React.FC<
-  UseInfiniteQueryResult<{ tracks?: Paging<Track> }> & { infiniteScroll?: boolean }
+  UseInfiniteQueryResult<{ results: { tracks?: Paging<Track> } }> & { infiniteScroll?: boolean }
 > = ({ data, isLoading, hasNextPage, isFetchingNextPage, infiniteScroll, fetchNextPage }) => {
   const placeholdersCount = isLoading ? numToDisplay : isFetchingNextPage ? 1 : 0;
   const pages = infiniteScroll ? data?.pages : [data?.pages[0]];
@@ -76,9 +76,11 @@ export const TracksList: React.FC<
     <List disablePadding>
       {pages?.map(page => {
         const itemsToDisplay = infiniteScroll
-          ? (page?.tracks?.items.length || 1) - 1
+          ? (page?.results.tracks?.items.length || 1) - 1
           : numToDisplay;
-        return page?.tracks?.items.slice(0, itemsToDisplay).map(i => <Item key={i.id} {...i} />);
+        return page?.results.tracks?.items
+          .slice(0, itemsToDisplay)
+          .map(i => <Item key={i.id} {...i} />);
       })}
       {new Array(placeholdersCount).fill(1).map((_, i) => (
         <Item key={i} isPlaceholder />

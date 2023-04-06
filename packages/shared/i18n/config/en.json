@@ -22,5 +22,9 @@
   "browseAllTitle": "Browse all",
   "recentSearchesTitle": "Recent searches",
   "episodeCardSubTitle": "{{releaseDate}} · {{duration}} Min",
-  "artistCardSubtitle": "Artist"
+  "episodeCardSubTitleLong": "Episode · {{releaseDate}} · {{duration}} Min",
+  "artistCardSubTitle": "Artist",
+  "albumCardSubTitle": "Album",
+  "trackCardSubTitle": "Song",
+  "showCardSubTitle": "Podcast"
 }

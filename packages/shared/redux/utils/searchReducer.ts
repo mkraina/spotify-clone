@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { SearchResultItem } from '../../api';
+import { SearchResultItem } from 'spotify-types';
 
 export type SearchState = {
   recentSearches: SearchResultItem[];

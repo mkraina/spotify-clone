@@ -137,7 +137,7 @@ const AvatarImage = assignDefaultProps(
                   style={{
                     width: size,
                     height: size,
-                    borderRadius: StyleSheet.flatten(style).borderRadius ?? size / 2,
+                    borderRadius: StyleSheet.flatten(style || {}).borderRadius ?? size / 2,
                   }}
                 />
               );

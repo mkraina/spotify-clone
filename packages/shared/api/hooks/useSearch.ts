@@ -14,8 +14,6 @@ const searchTypeToResultFieldMap: Record<SearchType, keyof SearchContent> = {
   episode: 'episodes',
 };
 
-export type SearchResultItem = NonNullable<SearchContent[keyof SearchContent]>['items'][0];
-
 export const useSearch = (props: Parameters<(typeof searchQueryKey)['search']>[0]) =>
   useInfiniteQuery(
     searchQueryKey.search(props),
@@ -24,16 +22,18 @@ export const useSearch = (props: Parameters<(typeof searchQueryKey)['search']>[0
       pageParam = 0,
     }: QueryFunctionContext<ReturnType<typeof searchQueryKey.search>, number>) => {
       const params = { limit: PAGE_SIZE, offset: pageParam };
-      const { data } = await api.get<SearchContent>('/search', {
+      const { data } = await api.get<SearchContent | undefined>('/search', {
         params: { ...params, type, q },
       });
       const [searchType, ...rest] = type;
       const nextOffset = pageParam + PAGE_SIZE;
       const dataForSearchType =
-        rest.length === 0 ? searchType && data[searchTypeToResultFieldMap[searchType]] : undefined;
+        rest.length === 0
+          ? searchType && data?.[searchTypeToResultFieldMap[searchType]]
+          : undefined;
       const total = dataForSearchType?.total || 0;
       const hasNextPage = dataForSearchType?.items.length && total > nextOffset;
-      return { ...data, nextOffset: hasNextPage ? nextOffset : undefined };
+      return { results: data || {}, nextOffset: hasNextPage ? nextOffset : undefined };
     },
     { enabled: !!props.q, getNextPageParam: d => d.nextOffset }
   );

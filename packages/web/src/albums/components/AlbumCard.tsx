@@ -12,7 +12,6 @@ export const AlbumCard: React.FC<{ album: SimplifiedAlbum }> = ({ album }) => {
       roundAvatar={false}
       subTitle={
         <>
-          {/*eslint-disable-next-line react/jsx-no-literals*/}
           {new Date(album.release_date).getFullYear()}
           {` · `}
           {album.artists.map((a, i) => (

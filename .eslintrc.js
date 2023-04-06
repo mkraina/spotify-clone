@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-// eslint-disable-next-line no-undef
 module.exports = {
   root: true,
   plugins: [
+    'eslint-comments',
     'react',
     'react-hooks',
     '@typescript-eslint',
@@ -162,5 +162,6 @@ module.exports = {
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
     'func-style': ['error', 'expression', { allowArrowFunctions: true }],
     '@typescript-eslint/no-use-before-define': 'error',
+    'eslint-comments/no-unused-disable': 'error',
   },
 };

@@ -12,7 +12,7 @@ export const ArtistCard: React.FC<{ artist: Artist }> = ({ artist }) => {
       href={routes.artist(artist)}
       image={artist.images[0]?.url}
       roundAvatar
-      subTitle={t('artistCardSubtitle')}
+      subTitle={t('artistCardSubTitle')}
       title={artist.name}
       trackId={artist.id}
     />

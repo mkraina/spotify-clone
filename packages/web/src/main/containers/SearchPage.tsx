@@ -1,19 +1,13 @@
-/* eslint-disable max-lines-per-function */
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Chip, styled, Typography } from '@mui/material';
-import {
-  SearchResult,
-  SearchResultItem,
-  useBrowseCategories,
-  useSearch,
-} from '@spotify-clone/shared/api';
+import { SearchResult, useBrowseCategories, useSearch } from '@spotify-clone/shared/api';
 import { TranslationKey } from '@spotify-clone/shared/i18n';
 import { useAppDispatch, useAppSelector } from '@spotify-clone/shared/redux';
 import { searchActions } from '@spotify-clone/shared/redux/utils/searchReducer';
 import { Filter, SelectedFilter, useSearchFilters } from '@spotify-clone/shared/search';
-import { Category, SearchContent } from 'spotify-types';
+import { Category, SearchContent, SearchResultItem } from 'spotify-types';
 
 import { AlbumCard } from '../../albums';
 import { ArtistCard } from '../../artists';
@@ -95,7 +89,7 @@ const Results: React.FC<{
   const items = useMemo(
     () =>
       data?.pages.reduce<SearchResultItem[]>(
-        (acc, cur) => [...acc, ...(cur[type]?.items || [])],
+        (acc, cur) => [...acc, ...(cur.results[type]?.items || [])],
         []
       ),
     [data?.pages, type]
