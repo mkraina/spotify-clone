@@ -1,14 +1,15 @@
 import React, { ComponentProps, useMemo } from 'react';
-import { TouchableNativeFeedback } from 'react-native';
+import { TextStyle, TouchableNativeFeedback } from 'react-native';
 import FastImage from 'react-native-fast-image';
 // eslint-disable-next-line no-restricted-imports
 import * as Paper from 'react-native-paper';
 import { spacing } from '@spotify-clone/shared/ui';
 
 import { navigationRef } from '../../navigation';
-import { ColorKey, StyleSheet, Theme, useStyles, useTheme } from '../hooks';
+import { ColorKey, StyleSheet, Theme, useColor, useStyles, useTheme } from '../hooks';
 
 import { IconName } from './Icon';
+import { addBackgroundInSkeleton } from './Skeleton';
 
 type WrappedComponentRef<T> = InstanceType<React.ComponentClass<T>>;
 
@@ -21,7 +22,7 @@ const themedStyles = StyleSheet.themed(theme => ({
     paddingTop: spacing(4),
     backgroundColor: theme.colors.background,
   },
-  appBarContentTitle: { fontWeight: 'bold', padding: spacing() },
+  appBarContentTitle: { padding: spacing() },
   chip: { borderRadius: 360 },
   chipSelected: {
     borderRadius: 360,
@@ -54,6 +55,27 @@ const assignDefaultProps = <T, R extends Partial<T>>(
   });
 };
 
+export const Text = addBackgroundInSkeleton(
+  ({
+    fontWeight,
+    textAlign,
+    ...props
+  }: ComponentProps<typeof Paper.Text> &
+    Pick<TextStyle, 'fontWeight' | 'textAlign'> & { color?: ColorKey }) => {
+    const color = useColor(props.color ?? 'onBackground');
+    return (
+      <Paper.Text
+        {...props}
+        style={
+          fontWeight || textAlign || color
+            ? [props.style, { fontWeight, textAlign, color }]
+            : props.style
+        }
+      />
+    );
+  }
+);
+
 export const Appbar = Object.assign(
   assignDefaultProps(Paper.Appbar, ({ mode }, { styles }) => ({
     style: mode === 'medium' ? styles.appBarLarge : undefined,
@@ -63,9 +85,9 @@ export const Appbar = Object.assign(
     Content: assignDefaultProps(Paper.Appbar.Content, undefined, ({ title }, { styles }) => ({
       title:
         typeof title === 'string' ? (
-          <Paper.Text style={styles.appBarContentTitle} variant="titleLarge">
+          <Text style={styles.appBarContentTitle} variant="titleLarge" fontWeight="bold">
             {title}
-          </Paper.Text>
+          </Text>
         ) : (
           title
         ),
@@ -91,8 +113,7 @@ export const TouchableRipple = React.memo<
     'rippleColor' | 'underlayColor'
   >
 >(props => {
-  const theme = useTheme();
-  const color = theme.colors[props.color ?? 'onBackground'];
+  const color = useColor(props.color ?? 'onBackground');
   return (
     <Paper.TouchableRipple
       background={useMemo(() => TouchableNativeFeedback.Ripple(color, true), [color])}
@@ -100,7 +121,6 @@ export const TouchableRipple = React.memo<
     />
   );
 });
-export const Text = Paper.Text;
 export const TextInput = Paper.TextInput;
 export const Card = Paper.Card;
 export const Chip = assignDefaultProps(
@@ -121,7 +141,7 @@ const AvatarIcon = assignDefaultProps(Paper.Avatar.Icon, (_, { theme }) => ({
 const AvatarImage = assignDefaultProps(
   Paper.Avatar.Image,
   undefined,
-  ({ source, style }, { theme }) => {
+  ({ source, style, onLayout }, { theme }) => {
     return {
       theme: { colors: { primary: theme.colors.elevation.level4 } },
       source:
@@ -139,6 +159,7 @@ const AvatarImage = assignDefaultProps(
                     height: size,
                     borderRadius: StyleSheet.flatten(style || {}).borderRadius ?? size / 2,
                   }}
+                  onLayout={onLayout}
                 />
               );
             },

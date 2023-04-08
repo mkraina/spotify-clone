@@ -1,13 +1,14 @@
 import { UseInfiniteQueryResult } from 'react-query';
 import { PlayArrowRounded } from '@mui/icons-material';
 import { Box, Link, List, ListItemButton, Skeleton, Typography } from '@mui/material';
+import { SearchResultData } from '@spotify-clone/shared/api';
 import { Color, PropsWithPlaceholder } from '@spotify-clone/shared/ui';
 import format from 'date-fns/format';
-import { Paging, Track } from 'spotify-types';
+import { Track } from 'spotify-types';
 import styled, { useTheme } from 'styled-components';
 
 import { routes, stopEventPropagation } from '../../navigation';
-import { AspectRatio, useScrollEndReached } from '../../ui';
+import { AspectRatio } from '../../ui';
 
 const PlayButtonOverlayContainer = styled(PlayArrowRounded)(({ theme }) => ({
   width: '100%',
@@ -64,14 +65,10 @@ const Item: React.FC<PropsWithPlaceholder<Track>> = props => {
 
 const numToDisplay = 4;
 export const TracksList: React.FC<
-  UseInfiniteQueryResult<{ results: { tracks?: Paging<Track> } }> & { infiniteScroll?: boolean }
-> = ({ data, isLoading, hasNextPage, isFetchingNextPage, infiniteScroll, fetchNextPage }) => {
+  UseInfiniteQueryResult<SearchResultData> & { infiniteScroll?: boolean }
+> = ({ data, isLoading, isFetchingNextPage, infiniteScroll, fetchNextPage }) => {
   const placeholdersCount = isLoading ? numToDisplay : isFetchingNextPage ? 1 : 0;
   const pages = infiniteScroll ? data?.pages : [data?.pages[0]];
-  useScrollEndReached(() => {
-    if (!infiniteScroll || isFetchingNextPage || !hasNextPage) return;
-    void fetchNextPage();
-  });
   return (
     <List disablePadding>
       {pages?.map(page => {
@@ -80,7 +77,7 @@ export const TracksList: React.FC<
           : numToDisplay;
         return page?.results.tracks?.items
           .slice(0, itemsToDisplay)
-          .map(i => <Item key={i.id} {...i} />);
+          .map(i => (i.type === 'track' ? <Item key={i.id} {...i} /> : null));
       })}
       {new Array(placeholdersCount).fill(1).map((_, i) => (
         <Item key={i} isPlaceholder />

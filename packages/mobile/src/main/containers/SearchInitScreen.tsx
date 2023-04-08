@@ -15,7 +15,6 @@ import { CategoryCard } from '../../categories';
 import { AppScreenProps } from '../../navigation';
 import {
   Appbar,
-  BottomTabBarPlaceholder,
   SafeArea,
   StickyHeader,
   StyleSheet,
@@ -32,7 +31,7 @@ const themedStyles = StyleSheet.themed(theme => ({
     backgroundColor: theme.colors.background,
     marginHorizontal: spacing(-0.5),
   },
-  browseAllTitle: { fontWeight: 'bold', padding: spacing(1.5) },
+  browseAllTitle: { padding: spacing(1.5) },
   contentContainer: { paddingHorizontal: spacing(0.5) },
   searchBarContainer: { padding: spacing(1.5), backgroundColor: theme.colors.background },
   searchBar: {
@@ -42,9 +41,8 @@ const themedStyles = StyleSheet.themed(theme => ({
     justifyContent: 'center',
     borderRadius: spacing(0.5),
   },
-  searchBarTitle: { color: theme.colors.background, fontWeight: 'bold' },
   cardContainer: { padding: spacing() },
-  card: { flex: 1 },
+  card: { flexGrow: 1, aspectRatio: 1 },
 }));
 
 const Header: React.FC<StickyHeaderComponentProps> = props => {
@@ -64,18 +62,23 @@ const Header: React.FC<StickyHeaderComponentProps> = props => {
             onPress={useCallback(() => navigate('search', {}), [navigate])}
             style={styles.searchBar}
           >
-            <Text variant="titleMedium" style={styles.searchBarTitle}>
+            <Text variant="titleMedium" color="background" fontWeight="bold">
               {t('searchInputPlaceholder')}
             </Text>
           </TouchableRipple>
         </View>
       </StickyHeader>
-      <Text variant="titleMedium" style={styles.browseAllTitle}>
+      <Text variant="titleMedium" style={styles.browseAllTitle} fontWeight="bold">
         {t('browseAllTitle')}
       </Text>
     </View>
   );
 };
+
+const itemStyle = (numColumns: number, styles: ReturnType<typeof themedStyles>) => [
+  styles.cardContainer,
+  { width: `${100 / numColumns}%` },
+];
 
 export const SearchInitScreen = React.memo<AppScreenProps<'searchInit'>>(() => {
   const categories = useBrowseCategories();
@@ -91,17 +94,27 @@ export const SearchInitScreen = React.memo<AppScreenProps<'searchInit'>>(() => {
         type="list"
         key={numColumns}
         numColumns={numColumns}
+        loading={categories.isLoading}
         data={categories.data?.categories.items}
         renderItem={useCallback<ListRenderItem<Category>>(
           ({ item }) => (
-            <View style={[styles.cardContainer, { width: `${100 / numColumns}%` }]}>
+            <View style={itemStyle(numColumns, styles)}>
               <CategoryCard style={styles.card} category={item} />
             </View>
           ),
-          [numColumns, styles.card, styles.cardContainer]
+          [numColumns, styles]
         )}
         contentContainerStyle={styles.contentContainer}
-        ListFooterComponent={BottomTabBarPlaceholder}
+        renderPlaceholder={useCallback(
+          () => (
+            <View style={itemStyle(numColumns, styles)}>
+              <CategoryCard.Placeholder style={styles.card} />
+            </View>
+          ),
+          [numColumns, styles]
+        )}
+        isError={categories.isError}
+        onRefresh={categories.refetch}
       />
     </>
   );

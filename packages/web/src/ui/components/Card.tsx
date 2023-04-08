@@ -14,6 +14,8 @@ import { AspectRatio } from './AspectRatio';
 const StyledAvatar = styled(Avatar)<{ $rounded: boolean }>(({ theme, $rounded }) => ({
   boxShadow: theme.shadows[8],
   borderRadius: $rounded ? undefined : theme.shape.borderRadius,
+  width: '100%',
+  height: '100%',
 }));
 
 const StyledPaper = styled(MaterialCard)({ flex: 1, cursor: 'pointer' }) as typeof MaterialCard;
@@ -28,9 +30,10 @@ const Label = styled(Typography)<{ $numOfLines?: number }>(({ $numOfLines, theme
 
 const PlayButtonContainer = styled.div<{ visible: boolean }>(({ theme, visible }) => ({
   position: 'absolute',
+  bottom: theme.spacing(2),
+  right: theme.spacing(2),
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
-  padding: theme.spacing(0.5),
   pointerEvents: visible ? 'auto' : 'none',
   opacity: visible ? 1 : 0,
   transform: visible ? 'translateY(0px)' : 'translateY(20px)',
@@ -93,7 +96,7 @@ export const Card: React.FC<
       onClick={props.isPlaceholder ? undefined : openDetail}
     >
       <Box flex={1} flexDirection="column" padding={1} position="relative">
-        <AspectRatio margin={1}>
+        <AspectRatio padding={1} width="100%">
           {props.isPlaceholder ? (
             <Skeleton
               height="100%"

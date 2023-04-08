@@ -1,17 +1,15 @@
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
-import { SearchContent, SearchType } from 'spotify-types';
+import { Paging, SearchContent, SearchResultItem, SearchType } from 'spotify-types';
 
 import { PAGE_SIZE } from '../config';
 import { searchQueryKey } from '../keyFactory';
 import { api } from '../utils/api';
 
 const defaultSearchTypes: SearchType[] = ['album', 'artist', 'track', 'show', 'episode'];
-const searchTypeToResultFieldMap: Record<SearchType, keyof SearchContent> = {
-  album: 'albums',
-  artist: 'artists',
-  track: 'tracks',
-  show: 'shows',
-  episode: 'episodes',
+
+export type SearchResultData = {
+  nextOffset: number | undefined;
+  results: { [K in keyof SearchContent]?: Paging<SearchResultItem> };
 };
 
 export const useSearch = (props: Parameters<(typeof searchQueryKey)['search']>[0]) =>
@@ -20,19 +18,17 @@ export const useSearch = (props: Parameters<(typeof searchQueryKey)['search']>[0
     async ({
       queryKey: [, , { q, type = defaultSearchTypes }],
       pageParam = 0,
-    }: QueryFunctionContext<ReturnType<typeof searchQueryKey.search>, number>) => {
+    }: QueryFunctionContext<
+      ReturnType<typeof searchQueryKey.search>,
+      number
+    >): Promise<SearchResultData> => {
       const params = { limit: PAGE_SIZE, offset: pageParam };
-      const { data } = await api.get<SearchContent | undefined>('/search', {
+      const { data } = await api.get<SearchResultData['results'] | undefined>('/search', {
         params: { ...params, type, q },
       });
-      const [searchType, ...rest] = type;
       const nextOffset = pageParam + PAGE_SIZE;
-      const dataForSearchType =
-        rest.length === 0
-          ? searchType && data?.[searchTypeToResultFieldMap[searchType]]
-          : undefined;
-      const total = dataForSearchType?.total || 0;
-      const hasNextPage = dataForSearchType?.items.length && total > nextOffset;
+      const total = Object.values(data || {}).reduce<number>((acc, cur) => acc + cur.total, 0);
+      const hasNextPage = total > nextOffset;
       return { results: data || {}, nextOffset: hasNextPage ? nextOffset : undefined };
     },
     { enabled: !!props.q, getNextPageParam: d => d.nextOffset }

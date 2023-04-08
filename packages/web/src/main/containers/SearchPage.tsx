@@ -149,6 +149,7 @@ const EmptySearch: React.FC = () => {
   );
 };
 
+// eslint-disable-next-line max-lines-per-function
 export default withParams<'search'>(({ params }) => {
   const { filters, selectedFilter } = useSearchFilters();
   const search = useSearch({ q: params.query, type: selectedFilter.value });
@@ -164,6 +165,7 @@ export default withParams<'search'>(({ params }) => {
           onChange={query => navigate(routes.search({ query }), { replace: true })}
         />
       }
+      {...(selectedFilter.value ? search : {})}
     >
       {params.query ? (
         <>

@@ -13,7 +13,7 @@ import { useSearch } from '@spotify-clone/shared/api';
 import { appActions, useAppDispatch, useAppSelector } from '@spotify-clone/shared/redux';
 import { Filter, useSearchFilters } from '@spotify-clone/shared/search';
 import { spacing } from '@spotify-clone/shared/ui';
-import { SearchResultItem } from 'spotify-types';
+import { SearchResultItem, SearchType } from 'spotify-types';
 import useEventCallback from 'use-event-callback';
 
 import { AlbumLineItem } from '../../albums';
@@ -23,8 +23,8 @@ import { EpisodeLineItem, ShowLineItem } from '../../shows';
 import { TrackLineItem } from '../../tracks';
 import {
   Appbar,
-  BottomTabBarPlaceholder,
   Chip,
+  LineItem,
   LineItemProvider,
   SafeArea,
   StyleSheet,
@@ -54,14 +54,14 @@ const themedStyles = StyleSheet.themed(({ colors }) => ({
   recentItemsHeading: {
     paddingHorizontal: spacing(2),
     paddingBottom: spacing(),
-    fontWeight: 'bold',
     paddingTop: spacing(3),
   },
   item: { paddingHorizontal: spacing(2) },
   chip: { margin: spacing() },
 }));
 
-const SelectedFilterContext = createContext(false);
+const SelectedFilterContext = createContext<SearchType[] | undefined>(undefined);
+const AvailableFiltersContext = createContext([] as Filter[]);
 
 const Item = React.memo<{ item: SearchResultItem; isRecent?: boolean }>(({ item, isRecent }) => {
   const dispatch = useAppDispatch();
@@ -107,9 +107,10 @@ const renderRecentItem: ListRenderItem<SearchResultItem> = ({ item }) => (
   <Item item={item} isRecent />
 );
 
-const Filters = React.memo<{ filters: Filter[] }>(({ filters }) => {
+const Filters = React.memo(() => {
   const styles = useStyles(themedStyles);
   const flatList = useRef<FlatList>(null);
+  const filters = useContext(AvailableFiltersContext);
 
   const resetFilters = useEventCallback(() => filters[0]?.onSelect());
   useLayoutEffect(() => () => resetFilters(), [resetFilters]);
@@ -146,7 +147,7 @@ const RecentItemsHeading: React.FC = () => {
   const { t } = useTranslation();
   const styles = useStyles(themedStyles);
   return (
-    <Text variant="titleMedium" style={styles.recentItemsHeading}>
+    <Text variant="titleMedium" style={styles.recentItemsHeading} fontWeight="bold">
       {t('recentSearchesTitle')}
     </Text>
   );
@@ -183,13 +184,26 @@ const Header: React.FC = () => {
   );
 };
 
+const Placeholder: React.FC = () => {
+  const styles = useStyles(themedStyles);
+  const selectedFilter = useContext(SelectedFilterContext);
+  const roundedAvatar = useRef(
+    selectedFilter ? !!selectedFilter.includes('artist') : Math.random() > 0.5
+  ).current;
+
+  return <LineItem.Placeholder style={styles.item} roundedAvatar={roundedAvatar} />;
+};
+
+const renderPlaceholder = () => <Placeholder />;
+
 const stickyHeaderIndices = [0];
 export const SearchScreen = React.memo<AppScreenProps<'search'>>(
   ({ route: { params: { query } = {} } }) => {
     const { selectedFilter, filters } = useSearchFilters();
     const search = useSearch({ q: query, type: selectedFilter.value });
+    const { t } = useTranslation();
     const recentItems = useAppSelector(s => s.search.recentSearches);
-    const items = useMemo<SearchResultItem[] | undefined>(
+    const searchResults = useMemo<SearchResultItem[] | undefined>(
       () =>
         search.data?.pages.reduce<SearchResultItem[]>(
           (acc, cur) => [
@@ -204,20 +218,31 @@ export const SearchScreen = React.memo<AppScreenProps<'search'>>(
       [search.data?.pages]
     );
 
-    const FiltersComponent = useMemo(() => <Filters filters={filters} />, [filters]);
-
     return (
-      <SelectedFilterContext.Provider value={!!selectedFilter.value}>
-        <Header />
-        <Screen
-          type="list"
-          stickyHeaderIndices={query ? stickyHeaderIndices : undefined}
-          stickyHeaderHiddenOnScroll
-          data={query ? items : recentItems}
-          renderItem={query ? renderItem : renderRecentItem}
-          ListHeaderComponent={query ? FiltersComponent : RecentItemsHeading}
-          ListFooterComponent={BottomTabBarPlaceholder}
-        />
+      <SelectedFilterContext.Provider value={selectedFilter.value}>
+        <AvailableFiltersContext.Provider value={filters}>
+          <Header />
+          <Screen
+            refreshing={query ? search.isRefetching : undefined}
+            onRefresh={query ? search.refetch : undefined}
+            type="list"
+            emptyMessage={t(query ? 'noSearchResultsMessage' : 'searchScreenCtaMessage')}
+            emptyTitle={t(query ? 'noSearchResultsTitle' : 'searchScreenCtaTitle', { query })}
+            stickyHeaderIndices={query ? stickyHeaderIndices : undefined}
+            stickyHeaderHiddenOnScroll
+            data={query ? searchResults : recentItems}
+            emptyIcon={query ? undefined : 'search'}
+            renderItem={query ? renderItem : renderRecentItem}
+            ListHeaderComponent={query ? Filters : recentItems.length ? RecentItemsHeading : null}
+            fetchingNext={query ? search.isFetchingNextPage : undefined}
+            loading={query ? search.isLoading : undefined}
+            renderPlaceholder={renderPlaceholder}
+            isError={query ? search.isError : undefined}
+            fetchNextPage={query ? search.fetchNextPage : undefined}
+            isFetchingNextPage={query ? search.isFetchingNextPage : undefined}
+            hasNextPage={query ? search.hasNextPage : undefined}
+          />
+        </AvailableFiltersContext.Provider>
       </SelectedFilterContext.Provider>
     );
   }

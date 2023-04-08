@@ -1,8 +1,6 @@
 import React from 'react';
 import { Grid, GridProps, useMediaQuery } from '@mui/material';
 
-import { useScrollEndReached } from '../hooks';
-
 export type GridLayoutProps<T> = {
   data: T[] | undefined;
   keyExtractor: (item: T, index: number) => string | number;
@@ -35,7 +33,6 @@ const Layout = <T,>({
   const lg = useMediaQuery(theme => theme.breakpoints.down('lg'));
   const xl = useMediaQuery(theme => theme.breakpoints.down('xl'));
   const columns = Math.min(maxColumns, xs ? 1 : sm ? 2 : md ? 3 : lg ? 4 : xl ? 5 : 7);
-  useScrollEndReached(() => hasNextPage && !isFetchingNextPage && fetchNextPage?.());
 
   return (
     <Grid columns={columns} container {...gridProps}>
