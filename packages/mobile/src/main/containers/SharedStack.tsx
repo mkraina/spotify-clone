@@ -12,6 +12,7 @@ import {
 
 import { AlbumScreen } from './AlbumScreen';
 import { ArtistScreen } from './ArtistScreen';
+import { CategoryScreen } from './CategoryScreen';
 
 type ParamList = HomeStackParamList | CollectionsStackParamList | SearchStackParamList;
 
@@ -30,5 +31,6 @@ export const SharedStack = React.memo<Props<ParamList>>(({ Stack, children }) =>
     {children}
     <Stack.Screen name="artist" component={ArtistScreen} />
     <Stack.Screen name="album" component={AlbumScreen} />
+    <Stack.Screen name="category" component={CategoryScreen} />
   </Stack.Navigator>
 )) as <T extends ParamList>(props: Props<T>) => React.ReactElement;

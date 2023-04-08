@@ -5,7 +5,7 @@ import { IconProps as VectorIconProps } from 'react-native-vector-icons/Icon';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { ColorKey, useTheme } from '../hooks';
+import { ColorKey, useColor } from '../hooks';
 
 export type IconName = keyof (typeof materialIconsGlyphMap & typeof materialCommunityIconsGlyphMap);
 export type IconProps = Omit<VectorIconProps, 'color'> & {
@@ -20,7 +20,6 @@ const IconBase = React.memo<VectorIconProps>(props => {
 });
 
 export const Icon = React.memo<IconProps>(({ color = 'onBackground', size = 24, ...iconProps }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  const finalColor = useTheme().colors[color] ?? color;
+  const finalColor = useColor(color);
   return <IconBase {...iconProps} color={finalColor} size={size} />;
 });

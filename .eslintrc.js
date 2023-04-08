@@ -1,10 +1,9 @@
 /* eslint-disable no-undef */
-// eslint-disable-next-line no-undef
 module.exports = {
   root: true,
   plugins: [
+    'eslint-comments',
     'react',
-    'react-perf',
     'react-hooks',
     '@typescript-eslint',
     '@shopify',
@@ -54,7 +53,6 @@ module.exports = {
     },
   },
   extends: [
-    'plugin:react-perf/recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:typescript-enum/recommended',
@@ -164,5 +162,6 @@ module.exports = {
     'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
     'func-style': ['error', 'expression', { allowArrowFunctions: true }],
     '@typescript-eslint/no-use-before-define': 'error',
+    'eslint-comments/no-unused-disable': 'error',
   },
 };

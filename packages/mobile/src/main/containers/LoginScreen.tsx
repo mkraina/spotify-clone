@@ -9,7 +9,7 @@ import { Screen } from '../components';
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center' },
   card: { paddingVertical: spacing(), margin: spacing(2), alignItems: 'center' },
-  title: { fontWeight: 'bold', padding: spacing(), textAlign: 'center' },
+  title: { padding: spacing() },
   button: { margin: spacing(), alignSelf: 'center' },
 });
 
@@ -19,7 +19,7 @@ export const LoginScreen = React.memo(() => {
     <Screen contentContainerStyle={styles.container} type="static">
       <SafeArea.Top />
       <Card style={styles.card}>
-        <Text variant="titleLarge" style={styles.title}>
+        <Text variant="titleLarge" style={styles.title} fontWeight="bold" textAlign="center">
           {t('loginPageMessage')}
         </Text>
         <Button style={styles.button} mode="contained" onPress={authService.authorize}>

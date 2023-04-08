@@ -39,7 +39,10 @@ const createApi = (): ApiInstance => {
   );
 
   api.interceptors.response.use(
-    response => response,
+    async response => {
+      if (__DEV__) await new Promise(resolve => setTimeout(resolve, 2500));
+      return response;
+    },
     async (error: AxiosError) => {
       try {
         const retryConfig = await getRetryConfig(error);
